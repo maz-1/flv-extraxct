@@ -9,5 +9,5 @@
 = Details =
 
 Change log:
--Allow people drap and drop folders, files and both in the same time into files list.
--Fix drap&drop multi files bug that not allow to add all of them.
+-Allow people drag and drop folders, files and both in the same time into files list.
+-Fix drag&drop multi files bug that not allow to add all of them.
