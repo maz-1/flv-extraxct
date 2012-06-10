@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace JDP {
 	public partial class frmStatus : Form {
@@ -14,7 +15,14 @@ namespace JDP {
 		volatile bool _extractAudio;
 		volatile bool _extractTimeCodes;
 		bool _overwriteAll;
-		bool _overwriteNone;
+		bool _overwriteNone;        
+        
+        string video_source;
+        string audio_source;
+        string target;
+        double fps;
+        string arg;
+        
 
 		public frmStatus(string[] paths, bool extractVideo, bool extractAudio, bool extractTimeCodes) {
 			InitializeComponent();
@@ -131,6 +139,7 @@ namespace JDP {
 
 		private void ExtractFilesThread() {
 			ListViewItem item = null;
+            string mode = "mp4";
 
 			for (int i = 0; (i < _paths.Length) && !_stop; i++) {
 				Invoke((MethodInvoker)delegate() {
@@ -140,28 +149,104 @@ namespace JDP {
 				});
 
 				try {
-					using (FLVFile flvFile = new FLVFile(_paths[i])) {
-						flvFile.ExtractStreams(_extractAudio, _extractVideo, _extractTimeCodes, PromptOverwrite);
+                    switch(mode)
+                    {
+                        case "flv":
+                            
+					        using (FLVFile flvFile = new FLVFile(_paths[i])) {
+                                
+						        flvFile.ExtractStreams(_extractAudio, _extractVideo, _extractTimeCodes, PromptOverwrite);
 
-						Invoke((MethodInvoker)delegate() {
-							if (flvFile.TrueFrameRate != null) {
-								item.SubItems[2].Text = flvFile.TrueFrameRate.Value.ToString(false);
-								item.SubItems[2].Tag = flvFile.TrueFrameRate;
-							}
-							if (flvFile.AverageFrameRate != null) {
-								item.SubItems[3].Text = flvFile.AverageFrameRate.Value.ToString(false);
-								item.SubItems[3].Tag = flvFile.AverageFrameRate;
-							}
-							if (flvFile.Warnings.Length == 0) {
-								item.ImageIndex = (int)IconIndex.OK;
-							}
-							else {
-								item.ImageIndex = (int)IconIndex.Warning;
-								item.SubItems[4].Text = String.Join("  ", flvFile.Warnings);
-							}
-						});
-					}
-				}
+						        Invoke((MethodInvoker)delegate() {
+                                    //txtStatus.Text = "Extracting...";
+							        if (flvFile.TrueFrameRate != null) {
+								        item.SubItems[2].Text = flvFile.TrueFrameRate.Value.ToString(false);
+								        item.SubItems[2].Tag = flvFile.TrueFrameRate;
+							        }
+							        if (flvFile.AverageFrameRate != null) {
+								        item.SubItems[3].Text = flvFile.AverageFrameRate.Value.ToString(false);
+								        item.SubItems[3].Tag = flvFile.AverageFrameRate;
+							        }
+							        if (flvFile.Warnings.Length == 0) {
+								        item.ImageIndex = (int)IconIndex.OK;
+							        }
+							        else {
+								        item.ImageIndex = (int)IconIndex.Warning;
+								        item.SubItems[4].Text = String.Join("  ", flvFile.Warnings);
+							        }
+                                    //txtStatus.Text = "Done extracting.";
+						        });                        
+					        }
+                            
+                            break;
+
+                        case "mp4":
+
+                            using (FLVFile flvFile = new FLVFile(_paths[i]))
+                            {
+                                flvFile.ExtractStreams(_extractAudio, _extractVideo, _extractTimeCodes, PromptOverwrite);
+
+                                Invoke((MethodInvoker)delegate()
+                                {
+                                    //txtStatus.Text = "Extracting...";
+                                    if (flvFile.TrueFrameRate != null)
+                                    {
+                                        item.SubItems[2].Text = flvFile.TrueFrameRate.Value.ToString(false);
+                                        item.SubItems[2].Tag = flvFile.TrueFrameRate;
+                                    }
+                                    if (flvFile.AverageFrameRate != null)
+                                    {
+                                        item.SubItems[3].Text = flvFile.AverageFrameRate.Value.ToString(false);
+                                        item.SubItems[3].Tag = flvFile.AverageFrameRate;
+                                    }
+                                    if (flvFile.Warnings.Length == 0)
+                                    {
+                                        item.ImageIndex = (int)IconIndex.OK;
+                                    }
+                                    else
+                                    {
+                                        item.ImageIndex = (int)IconIndex.Warning;
+                                        item.SubItems[4].Text = String.Join("  ", flvFile.Warnings);
+                                    }
+                                    //txtStatus.Text = "Remuxing to mp4 file...";
+                                });
+
+                                /** Extracting process ends here */
+
+                                /** Start muxing process here*/
+                                //MessageBox.Show("Done each of file");
+
+                                
+                                video_source = Path.ChangeExtension(_paths[i], ".264");
+                                audio_source = Path.ChangeExtension(_paths[i], ".acc");
+                                target = Path.ChangeExtension(_paths[i], ".mp4");
+                               
+                                fps = 23.976;
+                                arg = "-add \"" + video_source + ":fps=" + fps.ToString() + "\" -add " + audio_source + " \"" + target + "\"";
+
+                                // -add "F:\Anime\Full Metal Panic! Fumoffu\[A4VF]Full_Metal_Panic_Fumoffu-01.264:fps=23.976" -add "F:\Anime\Full Metal Panic! Fumoffu\[A4VF]Full_Metal_Panic_Fumoffu-01.aac" "F:\Anime\Full Metal Panic! Fumoffu\[A4VF]Full_Metal_Panic_Fumoffu-01.mp4"
+                                		
+
+                                /** Checking codes go here**/
+
+
+                                ProcessStartInfo startInfo = new ProcessStartInfo();
+                                startInfo.CreateNoWindow = false;
+                                startInfo.UseShellExecute = false;
+                                startInfo.FileName = frmMain.mp4box_path;
+                                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                                startInfo.Arguments = arg;
+
+                                using (Process exeProcess = Process.Start(startInfo))
+                                {
+                                    exeProcess.WaitForExit();
+                                    //txtStatus.Text = "Done.";
+                                }
+                                /** End here */
+                            }
+                        break;
+				    }
+                }
 				catch (Exception ex) {
 					Invoke((MethodInvoker)delegate() {
 						item.ImageIndex = (int)IconIndex.Error;
@@ -176,6 +261,7 @@ namespace JDP {
 				btnCopyFrameRates.Enabled = true;
 				btnOK.Enabled = true;
 			});
+        
 		}
 	}
 

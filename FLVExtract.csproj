@@ -72,6 +72,12 @@
     <Compile Include="frmOverwrite.Designer.cs">
       <DependentUpon>frmOverwrite.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmStatus.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmStatus.Designer.cs">
+      <DependentUpon>frmStatus.cs</DependentUpon>
+    </Compile>
     <Compile Include="Library\General.cs" />
     <Compile Include="Library\FLVFile.cs" />
     <Compile Include="frmMain.cs">
@@ -79,12 +85,6 @@
     </Compile>
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmStatus.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmStatus.Designer.cs">
-      <DependentUpon>frmStatus.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -97,7 +97,6 @@
       <DependentUpon>frmOverwrite.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmStatus.resx">
-      <SubType>Designer</SubType>
       <DependentUpon>frmStatus.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -141,6 +140,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="MP4Box.exe" />
     <Content Include="Setup.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

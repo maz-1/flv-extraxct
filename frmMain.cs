@@ -8,6 +8,7 @@ namespace JDP {
 	public partial class frmMain : Form {
 		Thread _statusThread;
         static List<string> paths = new List<string>();
+        public static string mp4box_path;
 
 		public frmMain() {
 			InitializeComponent();
@@ -117,6 +118,7 @@ namespace JDP {
 
 		private void frmMain_Load(object sender, EventArgs e) {
 			LoadSettings();
+            mp4box_path = Application.StartupPath.ToString() + "\\MP4Box.exe";
 		}
 
 		private void frmMain_FormClosed(object sender, FormClosedEventArgs e) {
@@ -127,6 +129,7 @@ namespace JDP {
         {
             try
             {
+                paths.Clear();
                 foreach (ListViewItem checkedItem in lvInput.CheckedItems)
                 {
                     // All these ListViewItems are checked, do something...
