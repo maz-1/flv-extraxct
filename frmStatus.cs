@@ -18,9 +18,12 @@ namespace JDP {
 		bool _overwriteNone;        
         
         string video_source;
+        string video_cmd;
         string audio_source;
+        string audio_cmd;
         string target;
         string fps;
+        string ratio;
         string arg;
         
 
@@ -139,7 +142,8 @@ namespace JDP {
 
 		private void ExtractFilesThread() {
 			ListViewItem item = null;
-            string mode = "mp4";
+            
+            //string mode = frmMain.rbtFLV;
 
 			for (int i = 0; (i < _paths.Length) && !_stop; i++) {
 				Invoke((MethodInvoker)delegate() {
@@ -148,11 +152,18 @@ namespace JDP {
 					item.EnsureVisible();
 				});
 
+                string video_source = null;
+                string video_cmd = null;
+                string audio_source = null;
+                string audio_cmd = null;
+                string target = null;
+                string fps = null;
+                string ratio = null;
+                string arg = null;
+
 				try {
-                    switch(mode)
-                    {
-                        case "flv":
-                            
+                    switch(frmMain._mode){
+                        case "FLV":
 					        using (FLVFile flvFile = new FLVFile(_paths[i])) {
                                 
 						        flvFile.ExtractStreams(_extractAudio, _extractVideo, _extractTimeCodes, PromptOverwrite);
@@ -177,11 +188,10 @@ namespace JDP {
                                     //txtStatus.Text = "Done extracting.";
 						        });                        
 					        }
-                            
                             break;
+                            // Case FLV
 
-                        case "mp4":
-
+                        case "MP4":
                             using (FLVFile flvFile = new FLVFile(_paths[i]))
                             {
                                 flvFile.ExtractStreams(_extractAudio, _extractVideo, _extractTimeCodes, PromptOverwrite);
@@ -216,38 +226,307 @@ namespace JDP {
                                     //MessageBox.Show("Done each of file");
 
                                     // -add "F:\Anime\Full Metal Panic! Fumoffu\[A4VF]Full_Metal_Panic_Fumoffu-01.264:fps=23.976" -add "F:\Anime\Full Metal Panic! Fumoffu\[A4VF]Full_Metal_Panic_Fumoffu-01.aac" "F:\Anime\Full Metal Panic! Fumoffu\[A4VF]Full_Metal_Panic_Fumoffu-01.mp4"
-
-                                    video_source = Path.ChangeExtension(_paths[i], ".264");
-                                    audio_source = Path.ChangeExtension(_paths[i], ".aac");
-                                    target = Path.ChangeExtension(_paths[i], ".mp4");
-
-                                    fps = "23.976";
-                                    arg = "-add \"" + video_source + ":fps=" + fps + "\" -add \"" + audio_source + "\" \"" + target + "\"";
+                                    // MP4Box.exe" -par 1=16:11 -add "F:\Anime\Full Metal Panic! Fumoffu\[A4VF]Full_Metal_Panic_Fumoffu-01.264:fps=29.976" -add "F:\Anime\Full Metal Panic! Fumoffu\[A4VF]Full_Metal_Panic_Fumoffu-01.aac" -itags tool="Yamb 2.1.0.0 [http://yamb.unite-video.com]" -new "F:\Anime\Full Metal Panic! Fumoffu\[A4VF]Full_Metal_Panic_Fumoffu-01.mp4"
 
                                     /** Checking codes go here**/
-                                    arg.Remove(arg.IndexOf("\\"), 1);
-                                    //MessageBox.Show(arg);
-
-                                    ProcessStartInfo startInfo = new ProcessStartInfo();
-                                    startInfo.CreateNoWindow = true;
-                                    startInfo.UseShellExecute = false;
-                                    startInfo.FileName = frmMain.mp4box_path;
-                                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                                    startInfo.Arguments = arg;
-
-                                    using (Process exeProcess = Process.Start(startInfo))
+                                    // command for video
+                                    if (frmMain._fps.Equals("") || frmMain._fps.Equals("Original"))
                                     {
-                                        exeProcess.WaitForExit();
-                                        
+                                        //fps = ":fps=" + Math.Round(flvFile.TrueFrameRate.Value.ToDouble(), 3).ToString();
+                                        fps = "";
                                     }
+                                    else
+                                    {
+                                        fps = ":fps=" + frmMain._fps;
+                                    }
+
+                                    video_source = Path.ChangeExtension(_paths[i], ".264");
+                                    video_cmd = "-add \"" + video_source + fps + "\"";
+
+                                    if (!File.Exists(video_source))
+                                    {
+                                        video_source = Path.ChangeExtension(_paths[i], ".avi");
+                                        video_cmd = "-add \"" + video_source + fps + "\"";
+                                        if (!File.Exists(video_source))
+                                        {
+                                            MessageBox.Show("Video does not exits, please check the video directory or extract setting.", "Error");
+                                            //return;
+                                        }
+                                    }
+
+                                    // command for audio
+                                    audio_source = Path.ChangeExtension(_paths[i], ".aac");
+                                    audio_cmd = "-add \"" + audio_source + "\"";
+                                    if (!File.Exists(audio_source))
+                                    {
+                                        audio_source = Path.ChangeExtension(_paths[i], ".mp3");
+                                        audio_cmd = "-add \"" + audio_source + "\"";
+                                        if (!File.Exists(audio_source))
+                                        {
+                                            MessageBox.Show(audio_source + " does not exits, please check the video directory/extract setting, or output video will have not audio.", "Warring");
+                                            audio_cmd = "";
+                                        }
+                                    }
+
+                                    // command for output
+                                    target = Path.ChangeExtension(_paths[i], ".mp4");
+                                    if (File.Exists(target))
+                                    {
+                                        var mes = MessageBox.Show(target + " has already existed, rewrite or save with new name?", "Warning", MessageBoxButtons.YesNoCancel);
+                                        if (mes == DialogResult.Yes)
+                                        {
+                                            File.Delete(target);
+                                            // build final command
+                                            arg = video_cmd + " " + audio_cmd + " " + "\"" + target + "\"";
+
+                                            ProcessStartInfo startInfo = new ProcessStartInfo();
+                                            startInfo.CreateNoWindow = cbxCommand.Checked ? false : true;
+                                            startInfo.UseShellExecute = false;
+                                            startInfo.FileName = frmMain.mp4box_path;
+                                            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                                            startInfo.Arguments = arg;
+
+                                            using (Process exeProcess = Process.Start(startInfo))
+                                            {
+                                                exeProcess.WaitForExit();
+
+                                            }
+                                        } // Yes rewrite
+
+                                        if (mes == System.Windows.Forms.DialogResult.No)
+                                        {
+                                            target = Path.ChangeExtension(_paths[i], "_new.mp4");
+                                            File.Delete(target);
+                                            // build final command
+                                            arg = video_cmd + " " + audio_cmd + " " + "\"" + target + "\"";
+
+                                            ProcessStartInfo startInfo = new ProcessStartInfo();
+                                            startInfo.CreateNoWindow = cbxCommand.Checked ? false : true;
+                                            startInfo.UseShellExecute = false;
+                                            startInfo.FileName = frmMain.mp4box_path;
+                                            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                                            startInfo.Arguments = arg;
+
+                                            using (Process exeProcess = Process.Start(startInfo))
+                                            {
+                                                exeProcess.WaitForExit();
+
+                                            }
+                                        } // No rewrite
+
+                                        else if (mes == System.Windows.Forms.DialogResult.Cancel)
+                                        {
+                                            item.SubItems[4].Text = "Skipped";
+                                        } // Skip
+                                    }
+                                    else
+                                    {
+                                        arg = video_cmd + " " + audio_cmd + " " + "\"" + target + "\"";
+
+                                        ProcessStartInfo startInfo = new ProcessStartInfo();
+                                        startInfo.CreateNoWindow = cbxCommand.Checked ? false : true;
+                                        startInfo.UseShellExecute = false;
+                                        startInfo.FileName = frmMain.mp4box_path;
+                                        startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                                        startInfo.Arguments = arg;
+
+                                        using (Process exeProcess = Process.Start(startInfo))
+                                        {
+                                            exeProcess.WaitForExit();
+
+                                        }
+                                    }
+
+                                    if (frmMain._remove)
+                                    {
+                                        File.Delete(video_source);
+                                        File.Delete(audio_source);
+                                    }
+
                                     txtStatus.Text = "Done.";
+
                                     /** End here */
                                 });
                                 
-                            }
-                        break;
+                            } // using
+                            break;
+                            // case MP4
+
+                        case "MKV":
+                            //MessageBox.Show("Not now", "Information");
+                            using (FLVFile flvFile = new FLVFile(_paths[i]))
+                            {
+                                flvFile.ExtractStreams(_extractAudio, _extractVideo, _extractTimeCodes, PromptOverwrite);
+
+                                Invoke((MethodInvoker)delegate()
+                                {
+                                    //txtStatus.Text = "Extracting...";
+                                    if (flvFile.TrueFrameRate != null)
+                                    {
+                                        item.SubItems[2].Text = flvFile.TrueFrameRate.Value.ToString(false);
+                                        item.SubItems[2].Tag = flvFile.TrueFrameRate;
+                                    }
+                                    if (flvFile.AverageFrameRate != null)
+                                    {
+                                        item.SubItems[3].Text = flvFile.AverageFrameRate.Value.ToString(false);
+                                        item.SubItems[3].Tag = flvFile.AverageFrameRate;
+                                    }
+                                    if (flvFile.Warnings.Length == 0)
+                                    {
+                                        item.ImageIndex = (int)IconIndex.OK;
+                                    }
+                                    else
+                                    {
+                                        item.ImageIndex = (int)IconIndex.Warning;
+                                        item.SubItems[4].Text = String.Join("  ", flvFile.Warnings);
+                                    }
+                                    txtStatus.Visible = true;
+                                    txtStatus.Text = "Remuxing to mkv file...";
+                                    /** Extracting process ends here */
+
+                                    /** Start muxing process here*/
+                                    //MessageBox.Show("Done each of file");
+
+                                    // mkvmerge.exe -o "F:\\Anime\\Full Metal Panic! Fumoffu\\[A4VF]Full_Metal_Panic_Fumoffu-01.mkv"  "--default-duration" "0:23.976fps" " "--aspect-ratio" "0:4/3" "-d" "(" "F:\\Anime\\Full Metal Panic! Fumoffu\\[A4VF]Full_Metal_Panic_Fumoffu-01.264" ")" "(" "F:\\Anime\\Full Metal Panic! Fumoffu\\[A4VF]Full_Metal_Panic_Fumoffu-01.aac" ")"
+
+                                    /** Checking codes go here**/
+                                    // command for video
+                                    if (frmMain._fps.Equals("") || frmMain._fps.Equals("Original"))
+                                    {
+                                        //fps = Math.Round(flvFile.TrueFrameRate.Value.ToDouble(), 3).ToString();
+                                        fps = "";
+                                    }
+                                    else
+                                    {
+                                        fps = "\"--default-duration\" \"0:" + frmMain._fps + "fps\" ";
+                                    } // fps
+
+                                    if (frmMain._ratio.Equals("") || frmMain._ratio.Equals("Original"))
+                                    {
+                                        ratio = "";
+                                    }
+                                    else
+                                    {
+                                        ratio = "\"--aspect-ratio\" \"0:" + frmMain._ratio.Replace(":", "/") + "\" ";
+                                    } // ratio
+
+                                    video_source = Path.ChangeExtension(_paths[i], ".264");
+                                    video_cmd = fps + ratio + "\"" + video_source + "\"";
+                                    if (!File.Exists(video_source))
+                                    {
+                                        video_source = Path.ChangeExtension(_paths[i], ".avi");
+                                        video_cmd = "\"--default-duration\" \"0:" + fps + "fps\" " + ratio + "\"" + video_source + "\"";
+                                        if (!File.Exists(video_source))
+                                        {
+                                            MessageBox.Show("Video does not exist, please check the video directory or extract setting.", "Error");
+                                            //return;
+                                        }
+                                    }
+
+                                    // command for audio
+                                    audio_source = Path.ChangeExtension(_paths[i], ".aac");
+                                    audio_cmd = "\"" + audio_source + "\"";
+                                    if (!File.Exists(audio_source))
+                                    {
+                                        audio_source = Path.ChangeExtension(_paths[i], ".mp3");
+                                        audio_cmd = "\"" + audio_source + "\"";
+                                        if (!File.Exists(audio_source))
+                                        {
+                                            MessageBox.Show(audio_source + " does not exist, please check the video directory/extract setting, or output video will have not audio.", "Warring");
+                                            audio_cmd = "";
+                                        }
+                                    }
+
+                                    // command for output
+                                    target = Path.ChangeExtension(_paths[i], ".mkv");
+                                    if (File.Exists(target))
+                                    {
+                                        var mes = MessageBox.Show(target + " has already existed, rewrite or save with new name?", "Warning", MessageBoxButtons.YesNoCancel);
+                                        if (mes == DialogResult.Yes)
+                                        {
+                                            File.Delete(target);
+                                            // build final command
+                                            arg = video_cmd + " " + audio_cmd + " -o \"" + target + "\"";
+
+                                            ProcessStartInfo startInfo = new ProcessStartInfo();
+                                            startInfo.CreateNoWindow = cbxCommand.Checked ? false : true;
+                                            startInfo.UseShellExecute = false;
+                                            startInfo.FileName = frmMain.mkvmerge_path;
+                                            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                                            startInfo.Arguments = arg;
+
+                                            using (Process exeProcess = Process.Start(startInfo))
+                                            {
+                                                exeProcess.WaitForExit();
+
+                                            }
+                                        } // Yes rewrite
+
+                                        if (mes == DialogResult.No)
+                                        {
+
+                                            target = Path.ChangeExtension(_paths[i], "_new.mkv");
+                                            File.Delete(target);
+                                            // build final command
+                                            arg = video_cmd + " " + audio_cmd + " -o \"" + target + "\"";
+
+                                            ProcessStartInfo startInfo = new ProcessStartInfo();
+                                            startInfo.CreateNoWindow = cbxCommand.Checked ? false : true;
+                                            startInfo.UseShellExecute = false;
+                                            startInfo.FileName = frmMain.mkvmerge_path;
+                                            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                                            startInfo.Arguments = arg;
+
+                                            using (Process exeProcess = Process.Start(startInfo))
+                                            {
+                                                exeProcess.WaitForExit();
+
+                                            }
+                                        } // No rewrite
+
+                                        else if (mes == System.Windows.Forms.DialogResult.Cancel)
+                                        {
+                                            item.SubItems[4].Text = "Skipped";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        arg = video_cmd + " " + audio_cmd + " -o \"" + target + "\"";
+
+                                        ProcessStartInfo startInfo = new ProcessStartInfo();
+                                        startInfo.CreateNoWindow = cbxCommand.Checked ? false : true;
+                                        startInfo.UseShellExecute = false;
+                                        startInfo.FileName = frmMain.mkvmerge_path;
+                                        startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                                        startInfo.Arguments = arg;
+
+                                        using (Process exeProcess = Process.Start(startInfo))
+                                        {
+                                            exeProcess.WaitForExit();
+
+                                        }
+                                    }
+
+                                    if (frmMain._remove)
+                                    {
+                                        File.Delete(video_source);
+                                        File.Delete(audio_source);
+                                    }
+
+                                    txtStatus.Text = "Done.";
+
+                                    /** End here */
+                                });
+                                
+                            } // using
+                            break;
+                            // case Mkv
+                            
+                        default:
+                            MessageBox.Show("Not now", "Information");
+                            break;
 				    }
-                }
+                } // try
 				catch (Exception ex) {
 					Invoke((MethodInvoker)delegate() {
 						item.ImageIndex = (int)IconIndex.Error;
