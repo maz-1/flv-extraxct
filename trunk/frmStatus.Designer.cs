@@ -23,6 +23,7 @@ namespace JDP {
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmStatus));
             this.lvStatus = new System.Windows.Forms.ListView();
             this.chStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chFile = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -33,6 +34,7 @@ namespace JDP {
             this.btnCopyFrameRates = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.txtStatus = new System.Windows.Forms.Label();
+            this.cbxCommand = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lvStatus
@@ -97,9 +99,9 @@ namespace JDP {
             // 
             this.btnCopyFrameRates.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnCopyFrameRates.Enabled = false;
-            this.btnCopyFrameRates.Location = new System.Drawing.Point(8, 302);
+            this.btnCopyFrameRates.Location = new System.Drawing.Point(362, 300);
             this.btnCopyFrameRates.Name = "btnCopyFrameRates";
-            this.btnCopyFrameRates.Size = new System.Drawing.Size(120, 23);
+            this.btnCopyFrameRates.Size = new System.Drawing.Size(104, 23);
             this.btnCopyFrameRates.TabIndex = 3;
             this.btnCopyFrameRates.Text = "&Copy Frame Rates";
             this.btnCopyFrameRates.UseVisualStyleBackColor = true;
@@ -119,22 +121,34 @@ namespace JDP {
             // txtStatus
             // 
             this.txtStatus.AutoSize = true;
-            this.txtStatus.Location = new System.Drawing.Point(146, 311);
+            this.txtStatus.Location = new System.Drawing.Point(5, 312);
             this.txtStatus.Name = "txtStatus";
-            this.txtStatus.Size = new System.Drawing.Size(0, 13);
+            this.txtStatus.Size = new System.Drawing.Size(43, 13);
             this.txtStatus.TabIndex = 4;
-            this.txtStatus.Visible = false;
+            this.txtStatus.Text = "Waiting";
+            // 
+            // cbxCommand
+            // 
+            this.cbxCommand.AutoSize = true;
+            this.cbxCommand.Location = new System.Drawing.Point(216, 306);
+            this.cbxCommand.Name = "cbxCommand";
+            this.cbxCommand.Size = new System.Drawing.Size(140, 17);
+            this.cbxCommand.TabIndex = 5;
+            this.cbxCommand.Text = "Show command window";
+            this.cbxCommand.UseVisualStyleBackColor = true;
             // 
             // frmStatus
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(608, 333);
+            this.Controls.Add(this.cbxCommand);
             this.Controls.Add(this.txtStatus);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnCopyFrameRates);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.lvStatus);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(280, 180);
             this.Name = "frmStatus";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
@@ -159,5 +173,6 @@ namespace JDP {
 		private System.Windows.Forms.Button btnCopyFrameRates;
 		private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Label txtStatus;
+        private System.Windows.Forms.CheckBox cbxCommand;
 	}
 }

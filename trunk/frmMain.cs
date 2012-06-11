@@ -9,6 +9,11 @@ namespace JDP {
 		Thread _statusThread;
         static List<string> paths = new List<string>();
         public static string mp4box_path;
+        public static string mkvmerge_path;
+        public static string _fps;
+        public static string _ratio;
+        public static string _mode;
+        public static bool _remove;
 
 		public frmMain() {
 			InitializeComponent();
@@ -57,7 +62,12 @@ namespace JDP {
 
                 "\n\n v1.7.1: " +
                 "\n -Allow people drap and drop folders, files and both in the same time into files list." +
-                "\n -Fix drap&drop multi files bug that not allow to add all of them.",
+                "\n -Fix drap&drop multi files bug that not allow to add all of them." +
+
+                "\n\n v2.0.1: " +
+                "\n -Add immediately remuxing to MP4/ MKV file feature." +
+                "\n -Fix some glitches."
+                ,
                  Environment.NewLine, General.Version),"About", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
 		}
@@ -118,7 +128,8 @@ namespace JDP {
 
 		private void frmMain_Load(object sender, EventArgs e) {
 			LoadSettings();
-            mp4box_path = Application.StartupPath.ToString() + "\\MP4Box.exe";
+            cbRatio.SelectedIndex = 0;
+            cbFps.SelectedIndex = 0;
 		}
 
 		private void frmMain_FormClosed(object sender, FormClosedEventArgs e) {
@@ -127,6 +138,41 @@ namespace JDP {
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+            _fps = cbFps.Text;
+            _ratio = cbRatio.Text;
+            _remove = cbxRemove.Checked ? true : false;
+
+            if (rbtFLV.Checked)
+            {
+                _mode = "FLV";
+            }
+            else if (rbtMp4.Checked) 
+            {
+                _mode = "MP4";
+                mp4box_path = Application.StartupPath.ToString() + "\\MP4Box.exe";
+                if (!File.Exists(mp4box_path))
+                {
+                    MessageBox.Show(mp4box_path + " is not found, copy it to the same folder of FLVExtract, please.", "Error");
+                    return;
+                }
+                else if (!File.Exists(Application.StartupPath.ToString() + "\\js32.dll"))
+                {
+                    MessageBox.Show("js32.dll is missing, this might cause some problem for MP4 muxing process.", "Warrning");                
+               }
+            }
+            else if (rbtMkv.Checked)
+            {
+                _mode = "MKV";
+                _ratio = cbRatio.Text;
+                mkvmerge_path = Application.StartupPath.ToString() + "\\mkvmerge.exe";
+                if (!File.Exists(mkvmerge_path))
+                {
+                    MessageBox.Show(mkvmerge_path + " is not found, copy it to the same folder of FLVExtract, please.", "Error");
+                    return;
+                }
+            }
+
+            
             try
             {
                 paths.Clear();

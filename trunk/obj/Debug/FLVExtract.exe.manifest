@@ -4,7 +4,7 @@
   <description asmv2:iconFile="Setup.ico" xmlns="urn:schemas-microsoft-com:asm.v1" />
   <application />
   <entryPoint>
-    <assemblyIdentity name="FLVExtract" version="1.7.1.0" language="neutral" processorArchitecture="msil" />
+    <assemblyIdentity name="FLVExtract" version="2.0.1.0" language="neutral" processorArchitecture="msil" />
     <commandLine file="FLVExtract.exe" parameters="" />
   </entryPoint>
   <trustInfo>
@@ -43,26 +43,17 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="FLVExtract.exe" size="628224">
-      <assemblyIdentity name="FLVExtract" version="1.7.1.0" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="FLVExtract.exe" size="923136">
+      <assemblyIdentity name="FLVExtract" version="2.0.1.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>eQ3C40ObLCw/azA4yg60o0LSNj0=</dsig:DigestValue>
+        <dsig:DigestValue>6pkxNpCVId/KdPZW9BMt+J4Y3II=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="MP4Box.exe" size="163840">
-    <hash>
-      <dsig:Transforms>
-        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-      </dsig:Transforms>
-      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>ruw+6TaVsn36RaVOlIoXUuMVcU8=</dsig:DigestValue>
-    </hash>
-  </file>
   <file name="Setup.ico" size="285478">
     <hash>
       <dsig:Transforms>
