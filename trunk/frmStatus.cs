@@ -20,7 +20,7 @@ namespace JDP {
         string video_source;
         string audio_source;
         string target;
-        double fps;
+        string fps;
         string arg;
         
 
@@ -208,41 +208,42 @@ namespace JDP {
                                         item.ImageIndex = (int)IconIndex.Warning;
                                         item.SubItems[4].Text = String.Join("  ", flvFile.Warnings);
                                     }
-                                    //txtStatus.Text = "Remuxing to mp4 file...";
+                                    txtStatus.Visible = true;
+                                    txtStatus.Text = "Remuxing to mp4 file...";
+                                    /** Extracting process ends here */
+
+                                    /** Start muxing process here*/
+                                    //MessageBox.Show("Done each of file");
+
+                                    // -add "F:\Anime\Full Metal Panic! Fumoffu\[A4VF]Full_Metal_Panic_Fumoffu-01.264:fps=23.976" -add "F:\Anime\Full Metal Panic! Fumoffu\[A4VF]Full_Metal_Panic_Fumoffu-01.aac" "F:\Anime\Full Metal Panic! Fumoffu\[A4VF]Full_Metal_Panic_Fumoffu-01.mp4"
+
+                                    video_source = Path.ChangeExtension(_paths[i], ".264");
+                                    audio_source = Path.ChangeExtension(_paths[i], ".aac");
+                                    target = Path.ChangeExtension(_paths[i], ".mp4");
+
+                                    fps = "23.976";
+                                    arg = "-add \"" + video_source + ":fps=" + fps + "\" -add \"" + audio_source + "\" \"" + target + "\"";
+
+                                    /** Checking codes go here**/
+                                    arg.Remove(arg.IndexOf("\\"), 1);
+                                    //MessageBox.Show(arg);
+
+                                    ProcessStartInfo startInfo = new ProcessStartInfo();
+                                    startInfo.CreateNoWindow = true;
+                                    startInfo.UseShellExecute = false;
+                                    startInfo.FileName = frmMain.mp4box_path;
+                                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                                    startInfo.Arguments = arg;
+
+                                    using (Process exeProcess = Process.Start(startInfo))
+                                    {
+                                        exeProcess.WaitForExit();
+                                        
+                                    }
+                                    txtStatus.Text = "Done.";
+                                    /** End here */
                                 });
-
-                                /** Extracting process ends here */
-
-                                /** Start muxing process here*/
-                                //MessageBox.Show("Done each of file");
-
                                 
-                                video_source = Path.ChangeExtension(_paths[i], ".264");
-                                audio_source = Path.ChangeExtension(_paths[i], ".acc");
-                                target = Path.ChangeExtension(_paths[i], ".mp4");
-                               
-                                fps = 23.976;
-                                arg = "-add \"" + video_source + ":fps=" + fps.ToString() + "\" -add " + audio_source + " \"" + target + "\"";
-
-                                // -add "F:\Anime\Full Metal Panic! Fumoffu\[A4VF]Full_Metal_Panic_Fumoffu-01.264:fps=23.976" -add "F:\Anime\Full Metal Panic! Fumoffu\[A4VF]Full_Metal_Panic_Fumoffu-01.aac" "F:\Anime\Full Metal Panic! Fumoffu\[A4VF]Full_Metal_Panic_Fumoffu-01.mp4"
-                                		
-
-                                /** Checking codes go here**/
-
-
-                                ProcessStartInfo startInfo = new ProcessStartInfo();
-                                startInfo.CreateNoWindow = false;
-                                startInfo.UseShellExecute = false;
-                                startInfo.FileName = frmMain.mp4box_path;
-                                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                                startInfo.Arguments = arg;
-
-                                using (Process exeProcess = Process.Start(startInfo))
-                                {
-                                    exeProcess.WaitForExit();
-                                    //txtStatus.Text = "Done.";
-                                }
-                                /** End here */
                             }
                         break;
 				    }
