@@ -106,7 +106,7 @@ namespace JDP {
                                 }
                             
                         }
-                        else if (file.Extension.Equals(".flv"))
+                        else if (file.Extension.Equals(".flv", StringComparison.CurrentCultureIgnoreCase))
                         {
 
                                 ListViewItem input_file = new ListViewItem(path[i].ToString());
