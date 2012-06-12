@@ -141,8 +141,7 @@ namespace JDP {
         {
             _fps = cbFps.Text;
             _ratio = cbRatio.Text;
-            _remove = chkRemove.Checked ? true : false;
-            _audio_muxing = chkAudio_Muxing.Checked ? true : false;
+            _remove = chkRemove.Checked ? true : false;            
 
             if (rbtFLV.Checked)
             {
@@ -232,11 +231,13 @@ namespace JDP {
             if (chkAudio_Muxing.Checked)
             {
                 chkVideo.Checked = false;
+                _audio_muxing = true;
             }
 
             else if (!chkAudio_Muxing.Checked)
             {
                 chkVideo.Checked = true;
+                _audio_muxing = false;
             }
         }
 
