@@ -152,14 +152,14 @@ namespace JDP {
 					item.EnsureVisible();
 				});
 
-                string video_source = null;
-                string video_cmd = null;
-                string audio_source = null;
-                string audio_cmd = null;
-                string target = null;
-                string fps = null;
-                string ratio = null;
-                string arg = null;
+                string video_source = "";
+                string video_cmd = "";
+                string audio_source = "";
+                string audio_cmd = "";
+                string target = "";
+                string fps = "";
+                string ratio = "";
+                string arg = "";
 
 				try {
                     switch(frmMain._mode){
@@ -198,7 +198,7 @@ namespace JDP {
 
                                 Invoke((MethodInvoker)delegate()
                                 {
-                                    //txtStatus.Text = "Extracting...";
+                                    txtStatus.Text = "Extracting...";
                                     if (flvFile.TrueFrameRate != null)
                                     {
                                         item.SubItems[2].Text = flvFile.TrueFrameRate.Value.ToString(false);
@@ -233,14 +233,14 @@ namespace JDP {
 
                                     if (frmMain._audio_muxing == true)
                                     {
-                                        txtStatus.Text = "Muxing only audio.";
+                                        //txtStatus.Text = "Muxing only audio.";
                                         fps = "";
                                         video_cmd = "";
                                     } // no video muxing
-                                    else if (frmMain._audio_muxing == false)
+                                    else if (frmMain._audio_muxing == false)                                    
                                     {
-                                        txtStatus.Text = "Muxing both video and audio";
-                                        MessageBox.Show("Muxing both video and audio");
+                                        
+                                        //MessageBox.Show("Muxing both video and audio");
                                         if (frmMain._fps.Equals("") || frmMain._fps.Equals("Original"))
                                         {
                                             //fps = ":fps=" + Math.Round(flvFile.TrueFrameRate.Value.ToDouble(), 3).ToString();
@@ -251,13 +251,38 @@ namespace JDP {
                                             fps = ":fps=" + frmMain._fps;
                                         }
 
+                                        if (frmMain._ratio.Equals("Original"))
+                                        {
+                                            ratio = "";
+                                        }
+                                        else if (frmMain._ratio.Equals("4:3"))
+                                        {                                            
+                                            ratio = ":par=1.33:1.33";
+                                        }
+                                        else if (frmMain._ratio.Equals("16:9"))
+                                        {
+                                            ratio = ":par=1.78:1.33";
+                                        }
+                                        //else if (frmMain._ratio.Equals("5:4"))
+                                        //{
+                                        //    ratio = ":par=" + 5 / 4 + ":1.33";
+                                        //}
+                                        //else if (frmMain._ratio.Equals("3:2"))
+                                        //{
+                                        //    ratio = ":par=" + 3 / 2 + ":1.33";
+                                        //}
+                                        //else if (frmMain._ratio.Equals("12:5"))
+                                        //{
+                                        //    ratio = ":par=" + 12 / 5 + ":1.33";
+                                        //}
+
                                         video_source = Path.ChangeExtension(_paths[i], ".264");
-                                        video_cmd = "-add \"" + video_source + fps + "\" ";
+                                        video_cmd = "-add \"" + video_source + "#video" + fps + ratio + "\" ";
 
                                         if (!File.Exists(video_source))
                                         {
                                             video_source = Path.ChangeExtension(_paths[i], ".avi");
-                                            video_cmd = "-add \"" + video_source + fps + "\" ";
+                                            video_cmd = "-add \"" + video_source + "#video" + fps + ratio + "\" ";
                                             if (!File.Exists(video_source))
                                             {
                                                 MessageBox.Show("Video does not exits, please check the video directory or extract setting.", "Error");
@@ -265,14 +290,15 @@ namespace JDP {
                                             }
                                         }
                                     } // else if has video
+                                    MessageBox.Show(video_cmd);
 
                                     // command for audio
                                     audio_source = Path.ChangeExtension(_paths[i], ".aac");
-                                    audio_cmd = "-add \"" + audio_source + "\" ";
+                                    audio_cmd = "-add \"" + audio_source + "#audio" + "\" ";
                                     if (!File.Exists(audio_source))
                                     {
                                         audio_source = Path.ChangeExtension(_paths[i], ".mp3");
-                                        audio_cmd = "-add \"" + audio_source + "\" ";
+                                        audio_cmd = "-add \"" + audio_source + "#audio" + "\" ";
                                         if (!File.Exists(audio_source))
                                         {
                                             MessageBox.Show(audio_source + " does not exits, please check the video directory/extract setting, or output video will have not audio.", "Warring");
@@ -300,13 +326,13 @@ namespace JDP {
                                             File.Delete(target);
                                             // build final command and mux files
                                             arg = video_cmd + audio_cmd + "\"" + target + "\"";
-                                            MessageBox.Show(arg);
+                                            //MessageBox.Show(arg);
                                             Mp4Muxing(arg);
                                         } // Yes rewrite
 
                                         if (mes == System.Windows.Forms.DialogResult.No)
                                         {
-                                            target = target.Insert(target.LastIndexOf(".") - 1, "_new");
+                                            target = target.Insert(target.LastIndexOf("."), "_new");
                                             File.Delete(target);
                                             // build final command
                                             arg = video_cmd + audio_cmd + "\"" + target + "\"";
@@ -329,7 +355,10 @@ namespace JDP {
                                     {
                                         try
                                         {
-                                            File.Delete(video_source);
+                                            if (frmMain._audio_muxing == false)
+                                            {
+                                                File.Delete(video_source);
+                                            }                                            
                                             File.Delete(audio_source);
                                             File.Delete(Path.ChangeExtension(_paths[i], ".txt"));
                                         }
@@ -356,7 +385,7 @@ namespace JDP {
 
                                 Invoke((MethodInvoker)delegate()
                                 {
-                                    //txtStatus.Text = "Extracting...";
+                                    txtStatus.Text = "Extracting...";
                                     if (flvFile.TrueFrameRate != null)
                                     {
                                         item.SubItems[2].Text = flvFile.TrueFrameRate.Value.ToString(false);
@@ -468,7 +497,7 @@ namespace JDP {
 
                                         if (mes == DialogResult.No)
                                         {
-                                            target = target.Insert(target.LastIndexOf(".") - 1, "_new");
+                                            target = target.Insert(target.LastIndexOf("."), "_new");
                                             File.Delete(target);
                                             // build final command
                                             arg = video_cmd + audio_cmd + " -o \"" + target + "\"";
@@ -489,7 +518,10 @@ namespace JDP {
 
                                     if (frmMain._remove)
                                     {
-                                        File.Delete(video_source);
+                                        if (frmMain._audio_muxing == false)
+                                        {
+                                            File.Delete(video_source);
+                                        }
                                         File.Delete(audio_source);
                                         File.Delete(Path.ChangeExtension(_paths[i], ".txt"));
                                     }

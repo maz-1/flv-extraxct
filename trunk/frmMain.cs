@@ -101,7 +101,9 @@ namespace JDP {
                                 string[] files = Directory.GetFiles(path[i].ToString(), "*.flv", SearchOption.TopDirectoryOnly);
                                 foreach (string s in files)
                                 {
-                                    ListViewItem input_file = new ListViewItem(s);
+                                    ListViewItem input_file = new ListViewItem();
+                                    input_file.SubItems.Add(s);
+                                    input_file.SubItems.Add(((new FileInfo(s).Length)/1024/1024).ToString() + " MB");
                                     lvInput.Items.Add(input_file);
                                     input_file.Checked = true;
                                 }
@@ -110,7 +112,9 @@ namespace JDP {
                         else if (file.Extension.Equals(".flv", StringComparison.CurrentCultureIgnoreCase))
                         {
 
-                                ListViewItem input_file = new ListViewItem(path[i].ToString());
+                                ListViewItem input_file = new ListViewItem();
+                                input_file.SubItems.Add(path[i].ToString());
+                                input_file.SubItems.Add(((new FileInfo(path[i]).Length)/1024/1024).ToString() + " MB");
                                 lvInput.Items.Add(input_file);
                                 input_file.Checked = true;
 
@@ -122,7 +126,7 @@ namespace JDP {
             catch (Exception ex)
             {
 
-                MessageBox.Show(ex.Message, "Error");
+                MessageBox.Show(ex.Message + "\n" + ex.StackTrace + "\n" + ex.HelpLink, "Error " + ex.Source);
             }
 			
 		}
@@ -131,6 +135,7 @@ namespace JDP {
 			LoadSettings();
             cbRatio.SelectedIndex = 0;
             cbFps.SelectedIndex = 0;
+            //ContextMenuStrip mn = new ContextMenuStrip();
 		}
 
 		private void frmMain_FormClosed(object sender, FormClosedEventArgs e) {
@@ -141,63 +146,73 @@ namespace JDP {
         {
             _fps = cbFps.Text;
             _ratio = cbRatio.Text;
-            _remove = chkRemove.Checked ? true : false;            
+            _remove = chkRemove.Checked ? true : false;
 
-            if (rbtFLV.Checked)
+            try
             {
-                _mode = "FLV";
-            }
-            else if (rbtMp4.Checked) 
-            {
-                _mode = "MP4";
-                mp4box_path = Application.StartupPath.ToString() + "\\MP4Box.exe";
-                if (!File.Exists(mp4box_path))
+                if (rbtFLV.Checked)
                 {
-                    MessageBox.Show(mp4box_path + " is not found, copy it to the same folder of FLVExtract, please.", "Error");
-                    return;
+                    _mode = "FLV";
                 }
-                else if (!File.Exists(Application.StartupPath.ToString() + "\\js32.dll"))
+                else if (rbtMp4.Checked)
                 {
-                    MessageBox.Show("js32.dll is missing, this might cause some problem for MP4 muxing process.", "Warrning");                
-               }
-            }
-            else if (rbtMkv.Checked)
-            {
-                _mode = "MKV";
-                _ratio = cbRatio.Text;
-                mkvmerge_path = Application.StartupPath.ToString() + "\\mkvmerge.exe";
-                if (!File.Exists(mkvmerge_path))
-                {
-                    MessageBox.Show(mkvmerge_path + " is not found, copy it to the same folder of FLVExtract, please.", "Error");
-                    return;
+                    _mode = "MP4";
+                    mp4box_path = Application.StartupPath.ToString() + "\\MP4Box.exe";
+                    if (!File.Exists(mp4box_path))
+                    {
+                        MessageBox.Show(mp4box_path + " is not found, copy it to the same folder of FLVExtract, please.", "Error");
+                        return;
+                    }
+                    else if (!File.Exists(Application.StartupPath.ToString() + "\\js32.dll"))
+                    {
+                        MessageBox.Show("js32.dll is missing, this might cause some problem for MP4 muxing process.", "Warrning");
+                    }
                 }
-            }
+                else if (rbtMkv.Checked)
+                {
+                    _mode = "MKV";
+                    _ratio = cbRatio.Text;
+                    mkvmerge_path = Application.StartupPath.ToString() + "\\mkvmerge.exe";
+                    if (!File.Exists(mkvmerge_path))
+                    {
+                        MessageBox.Show(mkvmerge_path + " is not found, copy it to the same folder of FLVExtract, please.", "Error");
+                        return;
+                    }
+                }
 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
             
             try
             {
-                paths.Clear();
-                foreach (ListViewItem checkedItem in lvInput.CheckedItems)
+                if (lvInput.CheckedItems.Count > 0)
                 {
-                    // All these ListViewItems are checked, do something...
-                    paths.Add(checkedItem.SubItems[0].Text);
-                }
-
-                string[] input_name = paths.ToArray();
-
-                frmStatus statusForm = new frmStatus(input_name,
-                        chkVideo.Checked, chkAudio.Checked, chkTimeCodes.Checked);
-                _statusThread = new Thread((ThreadStart)delegate()
-                {
-                    Invoke((MethodInvoker)delegate()
+                    paths.Clear();
+                    foreach (ListViewItem checkedItem in lvInput.CheckedItems)
                     {
-                        bool topMost = TopMost;
-                        TopMost = false;
-                        statusForm.ShowDialog();
-                        TopMost = topMost;
+                        // All these ListViewItems are checked, do something...
+                        paths.Add(checkedItem.SubItems[1].Text);
+                    }
+
+                    string[] input_name = paths.ToArray();
+
+                    frmStatus statusForm = new frmStatus(input_name,
+                            chkVideo.Checked, chkAudio.Checked, chkTimeCodes.Checked);
+                    _statusThread = new Thread((ThreadStart)delegate()
+                    {
+                        Invoke((MethodInvoker)delegate()
+                        {
+                            bool topMost = TopMost;
+                            TopMost = false;
+                            statusForm.ShowDialog();
+                            TopMost = topMost;
+                        });
                     });
-                });
-                _statusThread.Start();            
+                    _statusThread.Start();
+                }
             }
             catch (Exception ex)
             {
@@ -252,6 +267,16 @@ namespace JDP {
             {
                 chkAudio_Muxing.Checked = true;
             }
+        }
+
+        private void chkOnTop_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkOnTop.Checked)
+            {
+                this.TopMost = true;
+            }
+            else
+                this.TopMost = false;
         }
 	}
 }
