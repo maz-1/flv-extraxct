@@ -35,6 +35,7 @@ namespace JDP {
             this.btnStart = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.grpRemux = new System.Windows.Forms.GroupBox();
+            this.chkAudio_Muxing = new System.Windows.Forms.CheckBox();
             this.chkRemove = new System.Windows.Forms.CheckBox();
             this.cbRatio = new System.Windows.Forms.ComboBox();
             this.lblRatio = new System.Windows.Forms.Label();
@@ -43,7 +44,9 @@ namespace JDP {
             this.rbtMkv = new System.Windows.Forms.RadioButton();
             this.rbtMp4 = new System.Windows.Forms.RadioButton();
             this.rbtFLV = new System.Windows.Forms.RadioButton();
-            this.chkAudio_Muxing = new System.Windows.Forms.CheckBox();
+            this.chSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chkOnTop = new System.Windows.Forms.CheckBox();
+            this.chkbox = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.grpExtract.SuspendLayout();
             this.grpRemux.SuspendLayout();
             this.SuspendLayout();
@@ -65,7 +68,7 @@ namespace JDP {
             this.lblInstructions.Size = new System.Drawing.Size(168, 56);
             this.lblInstructions.TabIndex = 0;
             this.lblInstructions.Text = "Drop folders or files here.\r\n\r\nOutput files are written in the same folder as the" +
-                " FLVs.";
+    " FLVs.";
             this.lblInstructions.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // grpExtract
@@ -118,9 +121,14 @@ namespace JDP {
             // 
             this.lvInput.CheckBoxes = true;
             this.lvInput.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.chFilename});
+            this.chkbox,
+            this.chFilename,
+            this.chSize});
+            this.lvInput.FullRowSelect = true;
+            this.lvInput.GridLines = true;
             this.lvInput.Location = new System.Drawing.Point(11, 217);
             this.lvInput.Name = "lvInput";
+            this.lvInput.ShowItemToolTips = true;
             this.lvInput.Size = new System.Drawing.Size(571, 364);
             this.lvInput.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvInput.TabIndex = 3;
@@ -130,7 +138,7 @@ namespace JDP {
             // chFilename
             // 
             this.chFilename.Text = "Filename";
-            this.chFilename.Width = 400;
+            this.chFilename.Width = 470;
             // 
             // btnStart
             // 
@@ -158,8 +166,8 @@ namespace JDP {
             // 
             // grpRemux
             // 
-            this.grpRemux.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpRemux.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.grpRemux.Controls.Add(this.chkAudio_Muxing);
             this.grpRemux.Controls.Add(this.chkRemove);
             this.grpRemux.Controls.Add(this.cbRatio);
@@ -176,6 +184,17 @@ namespace JDP {
             this.grpRemux.TabStop = false;
             this.grpRemux.Text = "Remuxing";
             // 
+            // chkAudio_Muxing
+            // 
+            this.chkAudio_Muxing.AutoSize = true;
+            this.chkAudio_Muxing.Location = new System.Drawing.Point(15, 122);
+            this.chkAudio_Muxing.Name = "chkAudio_Muxing";
+            this.chkAudio_Muxing.Size = new System.Drawing.Size(149, 17);
+            this.chkAudio_Muxing.TabIndex = 6;
+            this.chkAudio_Muxing.Text = "To audio only (m4a / mka)";
+            this.chkAudio_Muxing.UseVisualStyleBackColor = true;
+            this.chkAudio_Muxing.CheckedChanged += new System.EventHandler(this.chkAudio_Muxing_CheckedChanged);
+            // 
             // chkRemove
             // 
             this.chkRemove.AutoSize = true;
@@ -183,7 +202,7 @@ namespace JDP {
             this.chkRemove.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkRemove.Location = new System.Drawing.Point(15, 99);
             this.chkRemove.Name = "chkRemove";
-            this.chkRemove.Size = new System.Drawing.Size(179, 17);
+            this.chkRemove.Size = new System.Drawing.Size(178, 17);
             this.chkRemove.TabIndex = 6;
             this.chkRemove.Text = "Remove temp files (.264, .acc,..)";
             this.chkRemove.UseVisualStyleBackColor = true;
@@ -198,6 +217,7 @@ namespace JDP {
             "4:3",
             "16:9",
             "5:4",
+            "3:2",
             "12:5"});
             this.cbRatio.Location = new System.Drawing.Point(182, 61);
             this.cbRatio.Name = "cbRatio";
@@ -247,7 +267,7 @@ namespace JDP {
             this.rbtMkv.AutoSize = true;
             this.rbtMkv.Location = new System.Drawing.Point(15, 65);
             this.rbtMkv.Name = "rbtMkv";
-            this.rbtMkv.Size = new System.Drawing.Size(92, 17);
+            this.rbtMkv.Size = new System.Drawing.Size(91, 17);
             this.rbtMkv.TabIndex = 2;
             this.rbtMkv.Text = "To mkv / mka";
             this.rbtMkv.UseVisualStyleBackColor = true;
@@ -258,7 +278,7 @@ namespace JDP {
             this.rbtMp4.Checked = true;
             this.rbtMp4.Location = new System.Drawing.Point(15, 43);
             this.rbtMp4.Name = "rbtMp4";
-            this.rbtMp4.Size = new System.Drawing.Size(92, 17);
+            this.rbtMp4.Size = new System.Drawing.Size(91, 17);
             this.rbtMp4.TabIndex = 1;
             this.rbtMp4.TabStop = true;
             this.rbtMp4.Text = "To mp4 / m4a";
@@ -269,21 +289,31 @@ namespace JDP {
             this.rbtFLV.AutoSize = true;
             this.rbtFLV.Location = new System.Drawing.Point(15, 20);
             this.rbtFLV.Name = "rbtFLV";
-            this.rbtFLV.Size = new System.Drawing.Size(70, 17);
+            this.rbtFLV.Size = new System.Drawing.Size(69, 17);
             this.rbtFLV.TabIndex = 0;
             this.rbtFLV.Text = "No remux";
             this.rbtFLV.UseVisualStyleBackColor = true;
             // 
-            // chkAudio_Muxing
+            // chSize
             // 
-            this.chkAudio_Muxing.AutoSize = true;
-            this.chkAudio_Muxing.Location = new System.Drawing.Point(15, 122);
-            this.chkAudio_Muxing.Name = "chkAudio_Muxing";
-            this.chkAudio_Muxing.Size = new System.Drawing.Size(150, 17);
-            this.chkAudio_Muxing.TabIndex = 6;
-            this.chkAudio_Muxing.Text = "To audio only (m4a / mka)";
-            this.chkAudio_Muxing.UseVisualStyleBackColor = true;
-            this.chkAudio_Muxing.CheckedChanged += new System.EventHandler(this.chkAudio_Muxing_CheckedChanged);
+            this.chSize.Text = "Size";
+            this.chSize.Width = 80;
+            // 
+            // chkOnTop
+            // 
+            this.chkOnTop.AutoSize = true;
+            this.chkOnTop.Location = new System.Drawing.Point(13, 180);
+            this.chkOnTop.Name = "chkOnTop";
+            this.chkOnTop.Size = new System.Drawing.Size(91, 17);
+            this.chkOnTop.TabIndex = 7;
+            this.chkOnTop.Text = "Always on top";
+            this.chkOnTop.UseVisualStyleBackColor = true;
+            this.chkOnTop.CheckedChanged += new System.EventHandler(this.chkOnTop_CheckedChanged);
+            // 
+            // chkbox
+            // 
+            this.chkbox.Text = "";
+            this.chkbox.Width = 20;
             // 
             // frmMain
             // 
@@ -291,6 +321,7 @@ namespace JDP {
             this.AllowDrop = true;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(594, 593);
+            this.Controls.Add(this.chkOnTop);
             this.Controls.Add(this.grpRemux);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnStart);
@@ -304,7 +335,6 @@ namespace JDP {
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FLV Extract v2.0";
-            this.TopMost = true;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmMain_FormClosed);
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.frmMain_DragDrop);
@@ -313,6 +343,7 @@ namespace JDP {
             this.grpRemux.ResumeLayout(false);
             this.grpRemux.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 
@@ -338,5 +369,8 @@ namespace JDP {
         private System.Windows.Forms.GroupBox grpRemux;
         private System.Windows.Forms.CheckBox chkRemove;
         private System.Windows.Forms.CheckBox chkAudio_Muxing;
+        private System.Windows.Forms.ColumnHeader chSize;
+        private System.Windows.Forms.CheckBox chkOnTop;
+        private System.Windows.Forms.ColumnHeader chkbox;
 	}
 }
