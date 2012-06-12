@@ -50,3 +50,16 @@ E:\My documents\Project\FLVExtract_1.7.1\FLVExtract source code\svn\obj\Debug\JD
 E:\My documents\Project\FLVExtract_1.7.1\FLVExtract source code\svn\obj\Debug\FLVExtract.csproj.GenerateResource.Cache
 E:\My documents\Project\FLVExtract_1.7.1\FLVExtract source code\svn\obj\Debug\FLVExtract.exe.manifest
 E:\My documents\Project\FLVExtract_1.7.1\FLVExtract source code\svn\obj\Debug\FLVExtract.application
+C:\Users\nghiepht_b01006\Documents\svn\obj\Debug\FLVExtract.exe
+C:\Users\nghiepht_b01006\Documents\svn\obj\Debug\FLVExtract.pdb
+C:\Users\nghiepht_b01006\Documents\svn\bin\Debug\FLVExtract.exe.manifest
+C:\Users\nghiepht_b01006\Documents\svn\bin\Debug\FLVExtract.application
+C:\Users\nghiepht_b01006\Documents\svn\bin\Debug\FLVExtract.exe
+C:\Users\nghiepht_b01006\Documents\svn\bin\Debug\FLVExtract.pdb
+C:\Users\nghiepht_b01006\Documents\svn\obj\Debug\JDP.frmMain.resources
+C:\Users\nghiepht_b01006\Documents\svn\obj\Debug\JDP.frmOverwrite.resources
+C:\Users\nghiepht_b01006\Documents\svn\obj\Debug\JDP.frmStatus.resources
+C:\Users\nghiepht_b01006\Documents\svn\obj\Debug\JDP.Properties.Resources.resources
+C:\Users\nghiepht_b01006\Documents\svn\obj\Debug\FLVExtract.csproj.GenerateResource.Cache
+C:\Users\nghiepht_b01006\Documents\svn\obj\Debug\FLVExtract.exe.manifest
+C:\Users\nghiepht_b01006\Documents\svn\obj\Debug\FLVExtract.application

@@ -12,3 +12,7 @@ E:\My documents\Project\FLVExtract_1.7.1\FLVExtract source code\svn\FLVExtractCL
 E:\My documents\Project\FLVExtract_1.7.1\FLVExtract source code\svn\FLVExtractCL\obj\Debug\FLVExtractCL.pdb
 E:\My documents\Project\FLVExtract_1.7.1\FLVExtract source code\svn\FLVExtractCL\bin\Debug\FLVExtractCL.exe
 E:\My documents\Project\FLVExtract_1.7.1\FLVExtract source code\svn\FLVExtractCL\bin\Debug\FLVExtractCL.pdb
+C:\Users\nghiepht_b01006\Documents\svn\FLVExtractCL\bin\Debug\FLVExtractCL.exe
+C:\Users\nghiepht_b01006\Documents\svn\FLVExtractCL\bin\Debug\FLVExtractCL.pdb
+C:\Users\nghiepht_b01006\Documents\svn\FLVExtractCL\obj\Debug\FLVExtractCL.exe
+C:\Users\nghiepht_b01006\Documents\svn\FLVExtractCL\obj\Debug\FLVExtractCL.pdb

@@ -34,14 +34,14 @@ namespace JDP {
             this.btnCopyFrameRates = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.txtStatus = new System.Windows.Forms.Label();
-            this.cbxCommand = new System.Windows.Forms.CheckBox();
+            this.chkCommand = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lvStatus
             // 
-            this.lvStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.lvStatus.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.chStatus,
             this.chFile,
@@ -127,22 +127,22 @@ namespace JDP {
             this.txtStatus.TabIndex = 4;
             this.txtStatus.Text = "Waiting";
             // 
-            // cbxCommand
+            // chkCommand
             // 
-            this.cbxCommand.AutoSize = true;
-            this.cbxCommand.Location = new System.Drawing.Point(216, 306);
-            this.cbxCommand.Name = "cbxCommand";
-            this.cbxCommand.Size = new System.Drawing.Size(140, 17);
-            this.cbxCommand.TabIndex = 5;
-            this.cbxCommand.Text = "Show command window";
-            this.cbxCommand.UseVisualStyleBackColor = true;
+            this.chkCommand.AutoSize = true;
+            this.chkCommand.Location = new System.Drawing.Point(216, 306);
+            this.chkCommand.Name = "chkCommand";
+            this.chkCommand.Size = new System.Drawing.Size(141, 17);
+            this.chkCommand.TabIndex = 5;
+            this.chkCommand.Text = "Show command window";
+            this.chkCommand.UseVisualStyleBackColor = true;
             // 
             // frmStatus
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(608, 333);
-            this.Controls.Add(this.cbxCommand);
+            this.Controls.Add(this.chkCommand);
             this.Controls.Add(this.txtStatus);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnCopyFrameRates);
@@ -173,6 +173,6 @@ namespace JDP {
 		private System.Windows.Forms.Button btnCopyFrameRates;
 		private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Label txtStatus;
-        private System.Windows.Forms.CheckBox cbxCommand;
+        private System.Windows.Forms.CheckBox chkCommand;
 	}
 }

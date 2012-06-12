@@ -14,6 +14,7 @@ namespace JDP {
         public static string _ratio;
         public static string _mode;
         public static bool _remove;
+        public static bool _audio_muxing;
 
 		public frmMain() {
 			InitializeComponent();
@@ -140,7 +141,8 @@ namespace JDP {
         {
             _fps = cbFps.Text;
             _ratio = cbRatio.Text;
-            _remove = cbxRemove.Checked ? true : false;
+            _remove = chkRemove.Checked ? true : false;
+            _audio_muxing = chkAudio_Muxing.Checked ? true : false;
 
             if (rbtFLV.Checked)
             {
@@ -222,6 +224,32 @@ namespace JDP {
             {
                 
                 MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+        private void chkAudio_Muxing_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkAudio_Muxing.Checked)
+            {
+                chkVideo.Checked = false;
+            }
+
+            else if (!chkAudio_Muxing.Checked)
+            {
+                chkVideo.Checked = true;
+            }
+        }
+
+        private void chkVideo_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkVideo.Checked)
+            {
+                chkAudio_Muxing.Checked = false;
+            }
+
+            else if (!chkVideo.Checked)
+            {
+                chkAudio_Muxing.Checked = true;
             }
         }
 	}
