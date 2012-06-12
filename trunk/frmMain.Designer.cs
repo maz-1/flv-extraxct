@@ -35,7 +35,7 @@ namespace JDP {
             this.btnStart = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.grpRemux = new System.Windows.Forms.GroupBox();
-            this.cbxRemove = new System.Windows.Forms.CheckBox();
+            this.chkRemove = new System.Windows.Forms.CheckBox();
             this.cbRatio = new System.Windows.Forms.ComboBox();
             this.lblRatio = new System.Windows.Forms.Label();
             this.lblFramerate = new System.Windows.Forms.Label();
@@ -43,6 +43,7 @@ namespace JDP {
             this.rbtMkv = new System.Windows.Forms.RadioButton();
             this.rbtMp4 = new System.Windows.Forms.RadioButton();
             this.rbtFLV = new System.Windows.Forms.RadioButton();
+            this.chkAudio_Muxing = new System.Windows.Forms.CheckBox();
             this.grpExtract.SuspendLayout();
             this.grpRemux.SuspendLayout();
             this.SuspendLayout();
@@ -64,7 +65,7 @@ namespace JDP {
             this.lblInstructions.Size = new System.Drawing.Size(168, 56);
             this.lblInstructions.TabIndex = 0;
             this.lblInstructions.Text = "Drop folders or files here.\r\n\r\nOutput files are written in the same folder as the" +
-    " FLVs.";
+                " FLVs.";
             this.lblInstructions.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // grpExtract
@@ -111,6 +112,7 @@ namespace JDP {
             this.chkVideo.TabIndex = 0;
             this.chkVideo.Text = "&Video";
             this.chkVideo.UseVisualStyleBackColor = true;
+            this.chkVideo.CheckedChanged += new System.EventHandler(this.chkVideo_CheckedChanged);
             // 
             // lvInput
             // 
@@ -156,9 +158,10 @@ namespace JDP {
             // 
             // grpRemux
             // 
-            this.grpRemux.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.grpRemux.Controls.Add(this.cbxRemove);
+            this.grpRemux.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpRemux.Controls.Add(this.chkAudio_Muxing);
+            this.grpRemux.Controls.Add(this.chkRemove);
             this.grpRemux.Controls.Add(this.cbRatio);
             this.grpRemux.Controls.Add(this.lblRatio);
             this.grpRemux.Controls.Add(this.lblFramerate);
@@ -173,17 +176,17 @@ namespace JDP {
             this.grpRemux.TabStop = false;
             this.grpRemux.Text = "Remuxing";
             // 
-            // cbxRemove
+            // chkRemove
             // 
-            this.cbxRemove.AutoSize = true;
-            this.cbxRemove.Checked = true;
-            this.cbxRemove.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbxRemove.Location = new System.Drawing.Point(34, 99);
-            this.cbxRemove.Name = "cbxRemove";
-            this.cbxRemove.Size = new System.Drawing.Size(178, 17);
-            this.cbxRemove.TabIndex = 6;
-            this.cbxRemove.Text = "Remove temp files (.264, .acc,..)";
-            this.cbxRemove.UseVisualStyleBackColor = true;
+            this.chkRemove.AutoSize = true;
+            this.chkRemove.Checked = true;
+            this.chkRemove.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkRemove.Location = new System.Drawing.Point(15, 99);
+            this.chkRemove.Name = "chkRemove";
+            this.chkRemove.Size = new System.Drawing.Size(179, 17);
+            this.chkRemove.TabIndex = 6;
+            this.chkRemove.Text = "Remove temp files (.264, .acc,..)";
+            this.chkRemove.UseVisualStyleBackColor = true;
             // 
             // cbRatio
             // 
@@ -242,34 +245,45 @@ namespace JDP {
             // rbtMkv
             // 
             this.rbtMkv.AutoSize = true;
-            this.rbtMkv.Location = new System.Drawing.Point(34, 65);
+            this.rbtMkv.Location = new System.Drawing.Point(15, 65);
             this.rbtMkv.Name = "rbtMkv";
-            this.rbtMkv.Size = new System.Drawing.Size(63, 17);
+            this.rbtMkv.Size = new System.Drawing.Size(92, 17);
             this.rbtMkv.TabIndex = 2;
-            this.rbtMkv.Text = "To MKV";
+            this.rbtMkv.Text = "To mkv / mka";
             this.rbtMkv.UseVisualStyleBackColor = true;
             // 
             // rbtMp4
             // 
             this.rbtMp4.AutoSize = true;
             this.rbtMp4.Checked = true;
-            this.rbtMp4.Location = new System.Drawing.Point(34, 43);
+            this.rbtMp4.Location = new System.Drawing.Point(15, 43);
             this.rbtMp4.Name = "rbtMp4";
-            this.rbtMp4.Size = new System.Drawing.Size(62, 17);
+            this.rbtMp4.Size = new System.Drawing.Size(92, 17);
             this.rbtMp4.TabIndex = 1;
             this.rbtMp4.TabStop = true;
-            this.rbtMp4.Text = "To MP4";
+            this.rbtMp4.Text = "To mp4 / m4a";
             this.rbtMp4.UseVisualStyleBackColor = true;
             // 
             // rbtFLV
             // 
             this.rbtFLV.AutoSize = true;
-            this.rbtFLV.Location = new System.Drawing.Point(34, 20);
+            this.rbtFLV.Location = new System.Drawing.Point(15, 20);
             this.rbtFLV.Name = "rbtFLV";
-            this.rbtFLV.Size = new System.Drawing.Size(69, 17);
+            this.rbtFLV.Size = new System.Drawing.Size(70, 17);
             this.rbtFLV.TabIndex = 0;
             this.rbtFLV.Text = "No remux";
             this.rbtFLV.UseVisualStyleBackColor = true;
+            // 
+            // chkAudio_Muxing
+            // 
+            this.chkAudio_Muxing.AutoSize = true;
+            this.chkAudio_Muxing.Location = new System.Drawing.Point(15, 122);
+            this.chkAudio_Muxing.Name = "chkAudio_Muxing";
+            this.chkAudio_Muxing.Size = new System.Drawing.Size(150, 17);
+            this.chkAudio_Muxing.TabIndex = 6;
+            this.chkAudio_Muxing.Text = "To audio only (m4a / mka)";
+            this.chkAudio_Muxing.UseVisualStyleBackColor = true;
+            this.chkAudio_Muxing.CheckedChanged += new System.EventHandler(this.chkAudio_Muxing_CheckedChanged);
             // 
             // frmMain
             // 
@@ -322,6 +336,7 @@ namespace JDP {
         private System.Windows.Forms.RadioButton rbtFLV;
         private System.Windows.Forms.ComboBox cbFps;
         private System.Windows.Forms.GroupBox grpRemux;
-        private System.Windows.Forms.CheckBox cbxRemove;
+        private System.Windows.Forms.CheckBox chkRemove;
+        private System.Windows.Forms.CheckBox chkAudio_Muxing;
 	}
 }
