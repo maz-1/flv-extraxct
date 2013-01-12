@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("FLV Extract")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Front-end mp4/mkv remuxer for FLV files.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("Copyright 2006-2012 J.D. Purcell\nUpdate by jofori89")]
+[assembly: AssemblyCopyright("Copyright 2006-2013 J.D. Purcell\nUpdate by jofori89")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("2.0.2.1")]
-[assembly: AssemblyFileVersion("2.0.2.1")]
+[assembly: AssemblyVersion("2.1.1.1")]
+[assembly: AssemblyFileVersion("2.1.1.1")]

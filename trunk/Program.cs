@@ -4,12 +4,16 @@ using System.Windows.Forms;
 
 namespace JDP {
 	static class Program {
-		[STAThread]
-		static void Main() {
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new frmMain());            
-		}
+		[STAThread]		
+        static void Main(string[] args)
+        {
+            string fileName;
+            if (args.Length > 0)
+                fileName = args[0];
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new frmMain());
+        }
 
 		public static void SetFontAndScaling(Form form) {
 			form.SuspendLayout();
