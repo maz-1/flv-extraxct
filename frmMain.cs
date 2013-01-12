@@ -15,6 +15,7 @@ namespace JDP {
         public static string _mode;
         public static bool _remove;
         public static bool _audio_muxing;
+        
 
 		public frmMain() {
 			InitializeComponent();
@@ -67,7 +68,11 @@ namespace JDP {
 
                 "\n\n v2.0.1: " +
                 "\n -Add immediately remuxing to MP4/ MKV file feature." +
-                "\n -Fix some glitches."
+                "\n -Fix some glitches." +
+
+                "\n\n v2.1.0.2: " +
+                "\n -Fix incorrect framerate for mp4 output file at auto option." +
+                "\n -Add right click menu, now user can add files via it or \"Open with...\" in Windows Explorer." 
                 ,
                  Environment.NewLine, General.Version),"About", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -89,38 +94,43 @@ namespace JDP {
                 var file_drops = e.Data.GetData(DataFormats.FileDrop);
 
                 if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                {                    
-                    string[] path = (string[])e.Data.GetData(DataFormats.FileDrop);
+                {
+                    
+                        string[] path = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-                    for (int i = 0; i < path.Length; i++)
-                    {
-                        FileInfo file = new FileInfo(path[i]);
+                        for (int i = 0; i < path.Length; i++)
+                        {
+                            FileInfo file = new FileInfo(path[i]);
 
-                        if (file.Extension.Equals(""))
-                        {                            
-                                string[] files = Directory.GetFiles(path[i].ToString(), "*.flv", SearchOption.TopDirectoryOnly);
+                            if (file.Extension.Equals(""))
+                            {
+                                string[] files = Directory.GetFiles(path[i], "*.flv", SearchOption.TopDirectoryOnly);
                                 foreach (string s in files)
                                 {
+                                
+                    
                                     ListViewItem input_file = new ListViewItem();
                                     input_file.SubItems.Add(s);
-                                    input_file.SubItems.Add(((new FileInfo(s).Length)/1024/1024).ToString() + " MB");
+                                    input_file.SubItems.Add(((new FileInfo(s).Length) / 1024 / 1024).ToString() + " MB");
+                                    
                                     lvInput.Items.Add(input_file);
                                     input_file.Checked = true;
                                 }
-                            
-                        }
-                        else if (file.Extension.Equals(".flv", StringComparison.CurrentCultureIgnoreCase))
-                        {
 
-                                ListViewItem input_file = new ListViewItem();
-                                input_file.SubItems.Add(path[i].ToString());
-                                input_file.SubItems.Add(((new FileInfo(path[i]).Length)/1024/1024).ToString() + " MB");
+                            }
+                            else if (file.Extension.Equals(".flv", StringComparison.CurrentCultureIgnoreCase))
+                            {
+
+                                ListViewItem input_file = new ListViewItem();                                
+                                input_file.SubItems.Add(path[i]);
+                                input_file.SubItems.Add(((new FileInfo(path[i]).Length) / 1024 / 1024).ToString() + " MB");
+                                
                                 lvInput.Items.Add(input_file);
                                 input_file.Checked = true;
 
-                        }
-                    }// for
-                } // if
+                            }
+                        }// for
+                    } // if
                 
             }
             catch (Exception ex)
@@ -131,11 +141,61 @@ namespace JDP {
 			
 		}
 
-		private void frmMain_Load(object sender, EventArgs e) {
-			LoadSettings();
-            cbRatio.SelectedIndex = 0;
-            cbFps.SelectedIndex = 0;
-            //ContextMenuStrip mn = new ContextMenuStrip();
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            try
+            {
+
+                LoadSettings();                
+                cbRatio.SelectedIndex = 0;
+                cbFps.SelectedIndex = 0;
+                //ContextMenuStrip mn = new ContextMenuStrip();
+
+                if (Environment.GetCommandLineArgs().Length > 1)
+                {
+                    string f = Environment.GetCommandLineArgs()[1];
+
+                    FileInfo file = new FileInfo(f);
+
+                    if (file.Extension.Equals(""))
+                    {
+                        string[] files = Directory.GetFiles(f, "*.flv", SearchOption.TopDirectoryOnly);
+                        foreach (string s in files)
+                        {
+                            ListViewItem input_file = new ListViewItem();
+                            input_file.SubItems.Add(s);
+                            input_file.SubItems.Add(((new FileInfo(s).Length) / 1024 / 1024).ToString() + " MB");
+                            
+                            lvInput.Items.Add(input_file);
+                            input_file.Checked = true;
+                        }
+
+                    }
+                    else if (file.Extension.Equals(".flv", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        ListViewItem input_file = new ListViewItem();
+                        input_file.SubItems.Add(f.ToString());
+                        input_file.SubItems.Add(((new FileInfo(f).Length) / 1024 / 1024).ToString() + " MB");
+                        
+                        lvInput.Items.Add(input_file);
+                        input_file.Checked = true;
+
+                    }
+                }
+
+                toolTip1.SetToolTip(grpRemux, "Select output type to remux file, no recoding file will be processed.");
+                toolTip1.SetToolTip(grpExtract, "Check which parts you want to keep in output files, timecodes can be uncheck.");
+                toolTip1.SetToolTip(this, "Drag & drop FLV file(s) or folder here to add. \nRight click for menu.");
+
+                toolTip1.SetToolTip(cbRatio, "Changing ratio of video should be currently used for Mkv output files only.");
+                toolTip1.SetToolTip(lvInput, "Uncheck to skip file(s)");
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
 		}
 
 		private void frmMain_FormClosed(object sender, FormClosedEventArgs e) {
@@ -165,7 +225,7 @@ namespace JDP {
                     }
                     else if (!File.Exists(Application.StartupPath.ToString() + "\\js32.dll"))
                     {
-                        MessageBox.Show("js32.dll is missing, this might cause some problem for MP4 muxing process.", "Warrning");
+                        MessageBox.Show("js32.dll is missing, this might cause some problem for MP4 muxing process.", "Warrning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
                 else if (rbtMkv.Checked)
@@ -277,6 +337,103 @@ namespace JDP {
             }
             else
                 this.TopMost = false;
+        }
+
+        private void lvInput_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            {
+                if (e.Button == MouseButtons.Right)
+                {
+                    //var item = lvInput.IndexFromPoint(e.Location);
+
+                    contextMenuStrip1.Show(lvInput, e.Location);
+                }
+                
+            }
+        }
+
+        private void addToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (OpenFileDialog of = new OpenFileDialog())
+                {
+                    of.Multiselect = true;
+                    of.ShowReadOnly = true;
+
+                    if (of.ShowDialog() == DialogResult.OK)
+                    {
+                        string[] path = (string[])of.FileNames;
+
+                        for (int i = 0; i < path.Length; i++)
+                        {
+                            FileInfo file = new FileInfo(path[i]);
+
+                            if (file.Extension.Equals(""))
+                            {
+                                string[] files = Directory.GetFiles(path[i].ToString(), "*.flv", SearchOption.TopDirectoryOnly);
+                                foreach (string s in files)
+                                {
+                                    ListViewItem input_file = new ListViewItem();
+                                    input_file.SubItems.Add(s);
+                                    input_file.SubItems.Add(((new FileInfo(s).Length) / 1024 / 1024).ToString() + " MB");
+                                    lvInput.Items.Add(input_file);
+                                    input_file.Checked = true;
+                                }
+
+                            }
+                            else if (file.Extension.Equals(".flv", StringComparison.CurrentCultureIgnoreCase))
+                            {
+                                ListViewItem input_file = new ListViewItem();
+                                input_file.SubItems.Add(path[i].ToString());
+                                input_file.SubItems.Add(((new FileInfo(path[i]).Length) / 1024 / 1024).ToString() + " MB");
+                                lvInput.Items.Add(input_file);
+                                input_file.Checked = true;
+
+                            }
+                        }// for
+                    } // if
+
+                };
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void clearAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            btnClear_Click(sender, e);
+        }
+
+        private void removeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //lvInput.SelectedItems.
+            if (lvInput.SelectedItems.Count > 0)
+            {
+                foreach (ListViewItem checkedItem in lvInput.SelectedItems)
+                {
+                    // All these ListViewItems are Selected, do something...
+                    checkedItem.Remove();
+                }
+                
+            }
+        }
+
+        private void skipTheseFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (lvInput.SelectedItems.Count > 0)
+            {
+                foreach (ListViewItem checkedItem in lvInput.SelectedItems)
+                {
+                    // All these ListViewItems are Selected, do something...
+                    checkedItem.Checked = false;
+                }
+
+            }
         }
 	}
 }

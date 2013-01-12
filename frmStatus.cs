@@ -1,10 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using System.Diagnostics;
 
 namespace JDP {
 	public partial class frmStatus : Form {
@@ -17,14 +17,7 @@ namespace JDP {
 		bool _overwriteAll;
 		bool _overwriteNone;        
         
-        string video_source;
-        string video_cmd;
-        string audio_source;
-        string audio_cmd;
-        string target;
-        string fps;
-        string ratio;
-        string arg;
+
         
 
 		public frmStatus(string[] paths, bool extractVideo, bool extractAudio, bool extractTimeCodes) {
@@ -163,34 +156,43 @@ namespace JDP {
 
 				try {
                     switch(frmMain._mode){
+                        #region "FLV"
                         case "FLV":
-					        using (FLVFile flvFile = new FLVFile(_paths[i])) {
-                                
-						        flvFile.ExtractStreams(_extractAudio, _extractVideo, _extractTimeCodes, PromptOverwrite);
+                            using (FLVFile flvFile = new FLVFile(_paths[i]))
+                            {
 
-						        Invoke((MethodInvoker)delegate() {
+                                flvFile.ExtractStreams(_extractAudio, _extractVideo, _extractTimeCodes, PromptOverwrite);
+
+                                Invoke((MethodInvoker)delegate()
+                                {
                                     //txtStatus.Text = "Extracting...";
-							        if (flvFile.TrueFrameRate != null) {
-								        item.SubItems[2].Text = flvFile.TrueFrameRate.Value.ToString(false);
-								        item.SubItems[2].Tag = flvFile.TrueFrameRate;
-							        }
-							        if (flvFile.AverageFrameRate != null) {
-								        item.SubItems[3].Text = flvFile.AverageFrameRate.Value.ToString(false);
-								        item.SubItems[3].Tag = flvFile.AverageFrameRate;
-							        }
-							        if (flvFile.Warnings.Length == 0) {
-								        item.ImageIndex = (int)IconIndex.OK;
-							        }
-							        else {
-								        item.ImageIndex = (int)IconIndex.Warning;
-								        item.SubItems[4].Text = String.Join("  ", flvFile.Warnings);
-							        }
+                                    if (flvFile.TrueFrameRate != null)
+                                    {
+                                        item.SubItems[2].Text = flvFile.TrueFrameRate.Value.ToString(false);
+                                        item.SubItems[2].Tag = flvFile.TrueFrameRate;
+                                    }
+                                    if (flvFile.AverageFrameRate != null)
+                                    {
+                                        item.SubItems[3].Text = flvFile.AverageFrameRate.Value.ToString(false);
+                                        item.SubItems[3].Tag = flvFile.AverageFrameRate;
+                                    }
+                                    if (flvFile.Warnings.Length == 0)
+                                    {
+                                        item.ImageIndex = (int)IconIndex.OK;
+                                    }
+                                    else
+                                    {
+                                        item.ImageIndex = (int)IconIndex.Warning;
+                                        item.SubItems[4].Text = String.Join("  ", flvFile.Warnings);
+                                    }
                                     //txtStatus.Text = "Done extracting.";
-						        });                        
-					        }
+                                });
+                            }
                             break;
-                            // Case FLV
+                        // Case FLV 
+                        #endregion
 
+                        #region "MP4"
                         case "MP4":
                             using (FLVFile flvFile = new FLVFile(_paths[i]))
                             {
@@ -237,14 +239,14 @@ namespace JDP {
                                         fps = "";
                                         video_cmd = "";
                                     } // no video muxing
-                                    else if (frmMain._audio_muxing == false)                                    
+                                    else if (frmMain._audio_muxing == false)
                                     {
-                                        
-                                        //MessageBox.Show("Muxing both video and audio");
-                                        if (frmMain._fps.Equals("") || frmMain._fps.Equals("Original"))
+
+
+                                        if (frmMain._fps.Equals("") || frmMain._fps.Equals("Auto"))
                                         {
                                             //fps = ":fps=" + Math.Round(flvFile.TrueFrameRate.Value.ToDouble(), 3).ToString();
-                                            fps = "";
+                                            fps = ":fps=" + flvFile.TrueFrameRate.ToString();
                                         }
                                         else
                                         {
@@ -256,7 +258,7 @@ namespace JDP {
                                             ratio = "";
                                         }
                                         else if (frmMain._ratio.Equals("4:3"))
-                                        {                                            
+                                        {
                                             ratio = ":par=1.33:1.33";
                                         }
                                         else if (frmMain._ratio.Equals("16:9"))
@@ -289,8 +291,7 @@ namespace JDP {
                                                 //return;
                                             }
                                         }
-                                    } // else if has video
-                                    MessageBox.Show(video_cmd);
+                                    } // else if has video                                    
 
                                     // command for audio
                                     audio_source = Path.ChangeExtension(_paths[i], ".aac");
@@ -315,18 +316,17 @@ namespace JDP {
                                     else
                                     {
                                         target = Path.ChangeExtension(_paths[i], ".mp4");
-                                    }                                 
-                                    
+                                    }
+
 
                                     if (File.Exists(target))
                                     {
-                                        var mes = MessageBox.Show(target + " has already existed, rewrite or save with new name?", "Warning", MessageBoxButtons.YesNoCancel);
+                                        var mes = MessageBox.Show(target + " has already existed, rewrite or save with new name?", "Warning", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                                         if (mes == DialogResult.Yes)
                                         {
                                             File.Delete(target);
                                             // build final command and mux files
-                                            arg = video_cmd + audio_cmd + "\"" + target + "\"";
-                                            //MessageBox.Show(arg);
+                                            arg = video_cmd + audio_cmd + "\"" + target + "\"";                                            
                                             Mp4Muxing(arg);
                                         } // Yes rewrite
 
@@ -358,12 +358,12 @@ namespace JDP {
                                             if (frmMain._audio_muxing == false)
                                             {
                                                 File.Delete(video_source);
-                                            }                                            
+                                            }
                                             File.Delete(audio_source);
                                             File.Delete(Path.ChangeExtension(_paths[i], ".txt"));
                                         }
                                         catch (Exception ex)
-                                        {                                            
+                                        {
                                             
                                         }
                                     }
@@ -372,11 +372,13 @@ namespace JDP {
 
                                     /** End here */
                                 });
-                                
+
                             } // using
                             break;
-                            // case MP4
-
+                        // case MP4
+                        
+                        #endregion
+                        #region "MKV"
                         case "MKV":
                             //MessageBox.Show("Not now", "Information");
                             using (FLVFile flvFile = new FLVFile(_paths[i]))
@@ -410,7 +412,7 @@ namespace JDP {
                                     /** Extracting process ends here */
 
                                     /** Start muxing process here*/
-                                    //MessageBox.Show("Done each of file");
+                                    
 
                                     // mkvmerge.exe -o "F:\\Anime\\Full Metal Panic! Fumoffu\\[A4VF]Full_Metal_Panic_Fumoffu-01.mkv"  "--default-duration" "0:23.976fps" " "--aspect-ratio" "0:4/3" "-d" "(" "F:\\Anime\\Full Metal Panic! Fumoffu\\[A4VF]Full_Metal_Panic_Fumoffu-01.264" ")" "(" "F:\\Anime\\Full Metal Panic! Fumoffu\\[A4VF]Full_Metal_Panic_Fumoffu-01.aac" ")"
 
@@ -424,7 +426,7 @@ namespace JDP {
                                     }
                                     else if (frmMain._audio_muxing == false)
                                     {
-                                        if (frmMain._fps.Equals("") || frmMain._fps.Equals("Original"))
+                                        if (frmMain._fps.Equals("") || frmMain._fps.Equals("Auto"))
                                         {
                                             //fps = Math.Round(flvFile.TrueFrameRate.Value.ToDouble(), 3).ToString();
                                             fps = "";
@@ -485,14 +487,14 @@ namespace JDP {
 
                                     if (File.Exists(target))
                                     {
-                                        var mes = MessageBox.Show(target + " has already existed, rewrite or save with new name?", "Warning", MessageBoxButtons.YesNoCancel);
+                                        var mes = MessageBox.Show(target + " has already existed, rewrite or save with new name?", "Warning", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                                         if (mes == DialogResult.Yes)
                                         {
                                             File.Delete(target);
                                             // build final command
                                             arg = video_cmd + audio_cmd + " -o \"" + target + "\"";
                                             MkvMuxing(arg);
-                                            
+
                                         } // Yes rewrite
 
                                         if (mes == DialogResult.No)
@@ -530,10 +532,11 @@ namespace JDP {
 
                                     /** End here */
                                 });
-                                
+
                             } // using
                             break;
-                            // case Mkv
+                        // case Mkv 
+                        #endregion
                             
                         default:
                             MessageBox.Show("Not now", "Information");
