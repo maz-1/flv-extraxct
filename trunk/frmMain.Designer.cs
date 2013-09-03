@@ -29,8 +29,8 @@ namespace JDP {
             this.lblInstructions = new System.Windows.Forms.Label();
             this.grpExtract = new System.Windows.Forms.GroupBox();
             this.chkAudio = new System.Windows.Forms.CheckBox();
-            this.chkTimeCodes = new System.Windows.Forms.CheckBox();
             this.chkVideo = new System.Windows.Forms.CheckBox();
+            this.chkTimeCodes = new System.Windows.Forms.CheckBox();
             this.lvInput = new System.Windows.Forms.ListView();
             this.chkbox = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chFilename = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -38,7 +38,6 @@ namespace JDP {
             this.btnStart = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.grpRemux = new System.Windows.Forms.GroupBox();
-            this.chkAudio_Muxing = new System.Windows.Forms.CheckBox();
             this.chkRemove = new System.Windows.Forms.CheckBox();
             this.cbRatio = new System.Windows.Forms.ComboBox();
             this.lblRatio = new System.Windows.Forms.Label();
@@ -82,36 +81,26 @@ namespace JDP {
             // grpExtract
             // 
             this.grpExtract.Controls.Add(this.chkAudio);
-            this.grpExtract.Controls.Add(this.chkTimeCodes);
             this.grpExtract.Controls.Add(this.chkVideo);
-            this.grpExtract.Location = new System.Drawing.Point(183, 12);
+            this.grpExtract.Controls.Add(this.chkTimeCodes);
+            this.grpExtract.Location = new System.Drawing.Point(166, 12);
             this.grpExtract.Name = "grpExtract";
-            this.grpExtract.Size = new System.Drawing.Size(96, 84);
+            this.grpExtract.Size = new System.Drawing.Size(130, 83);
             this.grpExtract.TabIndex = 1;
             this.grpExtract.TabStop = false;
-            this.grpExtract.Text = "Extract:";
+            this.grpExtract.Text = "Tracks";
             // 
             // chkAudio
             // 
             this.chkAudio.Checked = true;
             this.chkAudio.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAudio.Location = new System.Drawing.Point(12, 60);
+            this.chkAudio.Location = new System.Drawing.Point(12, 40);
             this.chkAudio.Name = "chkAudio";
             this.chkAudio.Size = new System.Drawing.Size(80, 17);
             this.chkAudio.TabIndex = 2;
             this.chkAudio.Text = "&Audio";
             this.chkAudio.UseVisualStyleBackColor = true;
-            // 
-            // chkTimeCodes
-            // 
-            this.chkTimeCodes.Checked = true;
-            this.chkTimeCodes.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkTimeCodes.Location = new System.Drawing.Point(12, 40);
-            this.chkTimeCodes.Name = "chkTimeCodes";
-            this.chkTimeCodes.Size = new System.Drawing.Size(80, 17);
-            this.chkTimeCodes.TabIndex = 1;
-            this.chkTimeCodes.Text = "&Timecodes";
-            this.chkTimeCodes.UseVisualStyleBackColor = true;
+            this.chkAudio.CheckedChanged += new System.EventHandler(this.chkAudio_CheckedChanged);
             // 
             // chkVideo
             // 
@@ -124,6 +113,17 @@ namespace JDP {
             this.chkVideo.Text = "&Video";
             this.chkVideo.UseVisualStyleBackColor = true;
             this.chkVideo.CheckedChanged += new System.EventHandler(this.chkVideo_CheckedChanged);
+            // 
+            // chkTimeCodes
+            // 
+            this.chkTimeCodes.Checked = true;
+            this.chkTimeCodes.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkTimeCodes.Location = new System.Drawing.Point(12, 60);
+            this.chkTimeCodes.Name = "chkTimeCodes";
+            this.chkTimeCodes.Size = new System.Drawing.Size(80, 17);
+            this.chkTimeCodes.TabIndex = 1;
+            this.chkTimeCodes.Text = "&Timecodes";
+            this.chkTimeCodes.UseVisualStyleBackColor = true;
             // 
             // lvInput
             // 
@@ -189,7 +189,6 @@ namespace JDP {
             // 
             this.grpRemux.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.grpRemux.Controls.Add(this.chkAudio_Muxing);
             this.grpRemux.Controls.Add(this.chkRemove);
             this.grpRemux.Controls.Add(this.cbRatio);
             this.grpRemux.Controls.Add(this.lblRatio);
@@ -205,23 +204,12 @@ namespace JDP {
             this.grpRemux.TabStop = false;
             this.grpRemux.Text = "Remuxing";
             // 
-            // chkAudio_Muxing
-            // 
-            this.chkAudio_Muxing.AutoSize = true;
-            this.chkAudio_Muxing.Location = new System.Drawing.Point(15, 122);
-            this.chkAudio_Muxing.Name = "chkAudio_Muxing";
-            this.chkAudio_Muxing.Size = new System.Drawing.Size(150, 17);
-            this.chkAudio_Muxing.TabIndex = 6;
-            this.chkAudio_Muxing.Text = "To audio only (m4a / mka)";
-            this.chkAudio_Muxing.UseVisualStyleBackColor = true;
-            this.chkAudio_Muxing.CheckedChanged += new System.EventHandler(this.chkAudio_Muxing_CheckedChanged);
-            // 
             // chkRemove
             // 
             this.chkRemove.AutoSize = true;
             this.chkRemove.Checked = true;
             this.chkRemove.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkRemove.Location = new System.Drawing.Point(15, 99);
+            this.chkRemove.Location = new System.Drawing.Point(15, 88);
             this.chkRemove.Name = "chkRemove";
             this.chkRemove.Size = new System.Drawing.Size(179, 17);
             this.chkRemove.TabIndex = 6;
@@ -334,26 +322,26 @@ namespace JDP {
             this.clearAllToolStripMenuItem,
             this.skipTheseFilesToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(164, 114);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(164, 92);
             // 
             // addToolStripMenuItem
             // 
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.addToolStripMenuItem.Text = "&Add";
             this.addToolStripMenuItem.Click += new System.EventHandler(this.addToolStripMenuItem_Click);
             // 
             // removeToolStripMenuItem
             // 
             this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
-            this.removeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.removeToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.removeToolStripMenuItem.Text = "Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
             // 
             // clearAllToolStripMenuItem
             // 
             this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
-            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.clearAllToolStripMenuItem.Text = "Clear all";
             this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.clearAllToolStripMenuItem_Click);
             // 
@@ -383,7 +371,7 @@ namespace JDP {
             this.MaximizeBox = false;
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "FLV Extract v2.0";
+            this.Text = "FLV Extract v2.2";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmMain_FormClosed);
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.frmMain_DragDrop);
@@ -404,29 +392,28 @@ namespace JDP {
 		private System.Windows.Forms.GroupBox grpExtract;
 		private System.Windows.Forms.CheckBox chkAudio;
 		private System.Windows.Forms.CheckBox chkTimeCodes;
-        private System.Windows.Forms.CheckBox chkVideo;
-        private System.Windows.Forms.ListView lvInput;
-        private System.Windows.Forms.ColumnHeader chFilename;
-        private System.Windows.Forms.Button btnStart;
-        private System.Windows.Forms.Button btnClear;
-        private System.Windows.Forms.Label lblFramerate;
-        private System.Windows.Forms.Label lblRatio;
-        private System.Windows.Forms.ComboBox cbRatio;
-        private System.Windows.Forms.RadioButton rbtMkv;
-        private System.Windows.Forms.RadioButton rbtMp4;
-        private System.Windows.Forms.RadioButton rbtFLV;
-        private System.Windows.Forms.ComboBox cbFps;
-        private System.Windows.Forms.GroupBox grpRemux;
+		private System.Windows.Forms.CheckBox chkVideo;
+		private System.Windows.Forms.ListView lvInput;
+		private System.Windows.Forms.ColumnHeader chFilename;
+		private System.Windows.Forms.Button btnStart;
+		private System.Windows.Forms.Button btnClear;
+		private System.Windows.Forms.Label lblFramerate;
+		private System.Windows.Forms.Label lblRatio;
+		private System.Windows.Forms.ComboBox cbRatio;
+		private System.Windows.Forms.RadioButton rbtMkv;
+		private System.Windows.Forms.RadioButton rbtMp4;
+		private System.Windows.Forms.RadioButton rbtFLV;
+		private System.Windows.Forms.ComboBox cbFps;
+		private System.Windows.Forms.GroupBox grpRemux;
         private System.Windows.Forms.CheckBox chkRemove;
-        private System.Windows.Forms.CheckBox chkAudio_Muxing;
-        private System.Windows.Forms.ColumnHeader chSize;
-        private System.Windows.Forms.CheckBox chkOnTop;
-        private System.Windows.Forms.ColumnHeader chkbox;
-        private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem clearAllToolStripMenuItem;
+		private System.Windows.Forms.ColumnHeader chSize;
+		private System.Windows.Forms.CheckBox chkOnTop;
+		private System.Windows.Forms.ColumnHeader chkbox;
+		private System.Windows.Forms.ToolTip toolTip1;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+		private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem clearAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem skipTheseFilesToolStripMenuItem;
 	}
 }
