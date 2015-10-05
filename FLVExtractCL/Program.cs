@@ -15,7 +15,7 @@ namespace JDP
             bool extractAudio = false;
             bool extractTimeCodes = false;
             string outputDirectory = null;
-            string inputPath;
+			string inputPath=null;
 
             Console.WriteLine("FLV Extract CL v" + General.Version);
             Console.WriteLine("Copyright 2006-2011 J.D. Purcell");

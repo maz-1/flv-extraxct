@@ -20,6 +20,7 @@ namespace JDP
         public static bool Remove;
         public static string MkvmergePath;
         public static string Mp4BoxPath;
+        public static char Slash = System.IO.Path.DirectorySeparatorChar;
         private static readonly List<string> Paths = new List<string>();
         private Thread _statusThread;
 
@@ -142,29 +143,24 @@ namespace JDP
                 else if (rbtMp4.Checked)
                 {
                     Mode = "MP4";
-                    Mp4BoxPath = string.Format("{0}\\MP4Box.exe", Application.StartupPath);
+                    Mp4BoxPath = string.Format("{0}"+Slash+"MP4Box.exe", Application.StartupPath);
                     if (!File.Exists(Mp4BoxPath))
                     {
                         MessageBox.Show(
                             string.Format("{0} is not found, copy it to the same folder of FLVExtract, please.", Mp4BoxPath), "Error");
                         return;
                     }
-                    if (!File.Exists(Application.StartupPath + "\\js32.dll"))
-                    {
-                        MessageBox.Show("js32.dll is missing, this might cause some problem for MP4 muxing process.",
-                                        "Warrning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
                 }
                 else if (rbtMkv.Checked)
                 {
                     Mode = "MKV";
                     Ratio = cbRatio.Text;
-                    MkvmergePath = string.Format("{0}\\mkvmerge.exe", Application.StartupPath);
+                    MkvmergePath = string.Format("{0}"+Slash+"mkvmerge.exe", Application.StartupPath);
                     if (!File.Exists(MkvmergePath))
                     {
                         MessageBox.Show(
-                            string.Format("{0} is not found, copy it to the same folder of FLVExtract, please.", MkvmergePath), "Error");
-                        return;
+			string.Format("{0} is not found, copy it to the same folder of FLVExtract, please.",         MkvmergePath), "Error");
+			return;
                     }
                 }
             }
@@ -235,8 +231,7 @@ namespace JDP
 
                 if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
                 var path = (string[]) e.Data.GetData(DataFormats.FileDrop);
-
-                for (int i = 0; i < path.Length; i++)
+				for (int i = 0; i < path.Length; i++)
                 {
                     var file = new FileInfo(path[i]);
 

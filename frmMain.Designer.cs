@@ -75,7 +75,7 @@ namespace JDP {
             this.lblInstructions.Size = new System.Drawing.Size(168, 56);
             this.lblInstructions.TabIndex = 0;
             this.lblInstructions.Text = "Drop folders or files here.\r\n\r\nOutput files are written in the same folder as the" +
-                " FLVs.";
+    " FLVs.";
             this.lblInstructions.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // grpExtract
@@ -127,8 +127,8 @@ namespace JDP {
             // 
             // lvInput
             // 
-            this.lvInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lvInput.CheckBoxes = true;
             this.lvInput.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.chkbox,
@@ -149,7 +149,7 @@ namespace JDP {
             // chkbox
             // 
             this.chkbox.Text = "";
-            this.chkbox.Width = 20;
+            this.chkbox.Width = 34;
             // 
             // chFilename
             // 
@@ -187,8 +187,8 @@ namespace JDP {
             // 
             // grpRemux
             // 
-            this.grpRemux.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpRemux.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.grpRemux.Controls.Add(this.chkRemove);
             this.grpRemux.Controls.Add(this.cbRatio);
             this.grpRemux.Controls.Add(this.lblRatio);
@@ -211,7 +211,7 @@ namespace JDP {
             this.chkRemove.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkRemove.Location = new System.Drawing.Point(15, 88);
             this.chkRemove.Name = "chkRemove";
-            this.chkRemove.Size = new System.Drawing.Size(179, 17);
+            this.chkRemove.Size = new System.Drawing.Size(438, 28);
             this.chkRemove.TabIndex = 6;
             this.chkRemove.Text = "Remove temp files (.264, .acc,..)";
             this.chkRemove.UseVisualStyleBackColor = true;
@@ -230,7 +230,7 @@ namespace JDP {
             "12:5"});
             this.cbRatio.Location = new System.Drawing.Point(182, 61);
             this.cbRatio.Name = "cbRatio";
-            this.cbRatio.Size = new System.Drawing.Size(92, 21);
+            this.cbRatio.Size = new System.Drawing.Size(92, 32);
             this.cbRatio.TabIndex = 5;
             // 
             // lblRatio
@@ -239,7 +239,7 @@ namespace JDP {
             this.lblRatio.AutoSize = true;
             this.lblRatio.Location = new System.Drawing.Point(113, 67);
             this.lblRatio.Name = "lblRatio";
-            this.lblRatio.Size = new System.Drawing.Size(63, 13);
+            this.lblRatio.Size = new System.Drawing.Size(154, 24);
             this.lblRatio.TabIndex = 4;
             this.lblRatio.Text = "Aspect ratio";
             // 
@@ -249,7 +249,7 @@ namespace JDP {
             this.lblFramerate.AutoSize = true;
             this.lblFramerate.Location = new System.Drawing.Point(152, 22);
             this.lblFramerate.Name = "lblFramerate";
-            this.lblFramerate.Size = new System.Drawing.Size(24, 13);
+            this.lblFramerate.Size = new System.Drawing.Size(46, 24);
             this.lblFramerate.TabIndex = 4;
             this.lblFramerate.Text = "Fps";
             // 
@@ -268,7 +268,7 @@ namespace JDP {
             "30"});
             this.cbFps.Location = new System.Drawing.Point(182, 19);
             this.cbFps.Name = "cbFps";
-            this.cbFps.Size = new System.Drawing.Size(92, 21);
+            this.cbFps.Size = new System.Drawing.Size(92, 32);
             this.cbFps.TabIndex = 3;
             // 
             // rbtMkv
@@ -276,7 +276,7 @@ namespace JDP {
             this.rbtMkv.AutoSize = true;
             this.rbtMkv.Location = new System.Drawing.Point(15, 65);
             this.rbtMkv.Name = "rbtMkv";
-            this.rbtMkv.Size = new System.Drawing.Size(92, 17);
+            this.rbtMkv.Size = new System.Drawing.Size(185, 28);
             this.rbtMkv.TabIndex = 2;
             this.rbtMkv.Text = "To mkv / mka";
             this.rbtMkv.UseVisualStyleBackColor = true;
@@ -287,7 +287,7 @@ namespace JDP {
             this.rbtMp4.Checked = true;
             this.rbtMp4.Location = new System.Drawing.Point(15, 43);
             this.rbtMp4.Name = "rbtMp4";
-            this.rbtMp4.Size = new System.Drawing.Size(92, 17);
+            this.rbtMp4.Size = new System.Drawing.Size(185, 28);
             this.rbtMp4.TabIndex = 1;
             this.rbtMp4.TabStop = true;
             this.rbtMp4.Text = "To mp4 / m4a";
@@ -298,7 +298,7 @@ namespace JDP {
             this.rbtFLV.AutoSize = true;
             this.rbtFLV.Location = new System.Drawing.Point(15, 20);
             this.rbtFLV.Name = "rbtFLV";
-            this.rbtFLV.Size = new System.Drawing.Size(70, 17);
+            this.rbtFLV.Size = new System.Drawing.Size(137, 28);
             this.rbtFLV.TabIndex = 0;
             this.rbtFLV.Text = "No remux";
             this.rbtFLV.UseVisualStyleBackColor = true;
@@ -308,7 +308,7 @@ namespace JDP {
             this.chkOnTop.AutoSize = true;
             this.chkOnTop.Location = new System.Drawing.Point(13, 180);
             this.chkOnTop.Name = "chkOnTop";
-            this.chkOnTop.Size = new System.Drawing.Size(92, 17);
+            this.chkOnTop.Size = new System.Drawing.Size(198, 28);
             this.chkOnTop.TabIndex = 7;
             this.chkOnTop.Text = "Always on top";
             this.chkOnTop.UseVisualStyleBackColor = true;
@@ -316,39 +316,40 @@ namespace JDP {
             // 
             // contextMenuStrip1
             // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addToolStripMenuItem,
             this.removeToolStripMenuItem,
             this.clearAllToolStripMenuItem,
             this.skipTheseFilesToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(164, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(259, 148);
             // 
             // addToolStripMenuItem
             // 
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(258, 36);
             this.addToolStripMenuItem.Text = "&Add";
             this.addToolStripMenuItem.Click += new System.EventHandler(this.addToolStripMenuItem_Click);
             // 
             // removeToolStripMenuItem
             // 
             this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
-            this.removeToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.removeToolStripMenuItem.Size = new System.Drawing.Size(258, 36);
             this.removeToolStripMenuItem.Text = "Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
             // 
             // clearAllToolStripMenuItem
             // 
             this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
-            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(258, 36);
             this.clearAllToolStripMenuItem.Text = "Clear all";
             this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.clearAllToolStripMenuItem_Click);
             // 
             // skipTheseFilesToolStripMenuItem
             // 
             this.skipTheseFilesToolStripMenuItem.Name = "skipTheseFilesToolStripMenuItem";
-            this.skipTheseFilesToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.skipTheseFilesToolStripMenuItem.Size = new System.Drawing.Size(258, 36);
             this.skipTheseFilesToolStripMenuItem.Text = "Skip these files";
             this.skipTheseFilesToolStripMenuItem.Click += new System.EventHandler(this.skipTheseFilesToolStripMenuItem_Click);
             // 
